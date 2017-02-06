@@ -1,0 +1,762 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS - block," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="本文主要探讨Block对象什么情况下会被复制到堆上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="block被copy的时间点">
+<meta property="og:url" content="http://yoursite.com/2016/04/19/block在被copy的时间点/index.html">
+<meta property="og:site_name" content="WillToSky">
+<meta property="og:description" content="本文主要探讨Block对象什么情况下会被复制到堆上">
+<meta property="og:image" content="http://i1.piimg.com/da1f4b8ec350e4e9.png">
+<meta property="og:image" content="http://i1.piimg.com/37197b99c12bfc88.png">
+<meta property="og:image" content="http://i1.piimg.com/93e0adb644bc6058.png">
+<meta property="og:image" content="http://i1.piimg.com/22c6ea6d358da27a.png">
+<meta property="og:image" content="http://i1.piimg.com/e8548f0a06159412.png">
+<meta property="og:updated_time" content="2016-09-25T00:41:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="block被copy的时间点">
+<meta name="twitter:description" content="本文主要探讨Block对象什么情况下会被复制到堆上">
+<meta name="twitter:image" content="http://i1.piimg.com/da1f4b8ec350e4e9.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/04/19/block在被copy的时间点/"/>
+
+
+
+
+
+  <title> block被copy的时间点 | WillToSky </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bb1aa8ec5764977520de27eaccc4124a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">WillToSky</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">学习反思之路</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/19/block在被copy的时间点/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="WillToSky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="WillToSky">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="WillToSky" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                block被copy的时间点
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-19T12:08:54+08:00">
+                2016-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/19/block在被copy的时间点/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/19/block在被copy的时间点/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  本文主要探讨Block对象什么情况下会被复制到堆上
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Block对象什么情况下会被copy"><a href="#Block对象什么情况下会被copy" class="headerlink" title="Block对象什么情况下会被copy"></a>Block对象什么情况下会被copy</h2><blockquote>
+<p>如题，本文主要探讨Block对象什么情况下会被复制到堆上，关于Block的更多详细资料可以查看文章最后的参考资料。</p>
+</blockquote>
+<h3 id="Block-的类"><a href="#Block-的类" class="headerlink" title="Block 的类"></a>Block 的类</h3><p>Block也是OC的对象，Block的类一共有3种</p>
+<ol>
+<li><code>_NSConcreteStackBlock</code> － 当Block对象被设置在栈上时。一般来说，当初始化Block对象时，默认是将Block设置在栈上的。</li>
+<li><code>_NSConcreteMallocBlock</code>－ 当Block对象设置在由malloc函数的内存块时。当设置在栈上的Block执行copy操作时，Block会被复制到堆上。</li>
+<li><code>_NSConcreteGlobalBlock</code>－ 当Block对象被设置在应用程序的数据区域（存储全局变量的内存块）时。当Block对象中没有引用外部变量时，Block对象会自动被设置到引用程序的数据区域中。</li>
+</ol>
+<p>测试数据</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">typedef</span> <span class="keyword">void</span>(^blk)(<span class="keyword">int</span> a);</div><div class="line">  </div><div class="line"><span class="keyword">int</span> b;</div><div class="line"> </div><div class="line">   <span class="comment">//当初始化Block对象时，默认是将Block设置在栈上的。</span></div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"栈中的 block %@"</span>,^(<span class="keyword">int</span> a)&#123;</div><div class="line">       </div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);</div><div class="line">   &#125;);</div><div class="line">   </div><div class="line">  <span class="comment">// 当设置在栈上的Block执行copy操作时，Block会被复制到堆上。</span></div><div class="line">   blk copyBlock = [^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);</div><div class="line">   &#125; <span class="keyword">copy</span>];</div><div class="line">   </div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"堆中的 block %@"</span>,copyBlock);</div><div class="line">   </div><div class="line">   </div><div class="line">   <span class="comment">//当Block对象中没有引用外部变量时，Block对象会自动被设置到引用程序的数据区域中。</span></div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"数据区域中的 block %@"</span>,^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d"</span>,a);</div><div class="line">   &#125;);</div></pre></td></tr></table></figure>
+<p>程序运行结果</p>
+<p><img src="http://i1.piimg.com/da1f4b8ec350e4e9.png"></p>
+<h3 id="Block-什么时候会被复制"><a href="#Block-什么时候会被复制" class="headerlink" title="Block 什么时候会被复制"></a>Block 什么时候会被复制</h3><blockquote>
+<p>下面的Block对象如果无特殊提示都是指<code>被设置在栈上的</code>，因为如果一个block对象被设置在应用程序的数据区域，那这个block对象的类（<code>__NSGlobalBlock__</code>）基本不会再被改变了。</p>
+</blockquote>
+<ul>
+<li>在ARC环境下，将Block对象（必须是被设置在栈上的）赋值给一个变量时，Block对象会被复制到堆上。由于在ARC的环境下，变量默认时__strong类型的，所以Block对象会被复制。</li>
+</ul>
+<p>测试代码<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">  <span class="keyword">typedef</span> <span class="keyword">void</span>(^blk)(<span class="keyword">int</span> a);</div><div class="line">  </div><div class="line">  <span class="comment">//ARC情况下，默认的变量修饰符时__strong</span></div><div class="line">blk  block1 = ^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"%d,%d"</span>,a,b);</div><div class="line">   &#125;;</div><div class="line">   <span class="comment">//当采用__weak 变量时，block没有被复制到堆上</span></div><div class="line">   blk __<span class="keyword">weak</span>  block2 = ^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"%d,%d"</span>,a,b);</div><div class="line">   &#125;;</div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"默认赋值 %@"</span>,block1);</div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"使用__weak 变量进行赋值 %@"</span>,block2);</div></pre></td></tr></table></figure></p>
+<p>测试结果</p>
+<p><img src="http://i1.piimg.com/37197b99c12bfc88.png"></p>
+<blockquote>
+<p>当使用weak 变量赋值时，由于Block对象没有被任何对象持有，所以Block对象应该会在被定义后就立即被释放了。所以最好不要用把Block对象赋值给weak变量。</p>
+</blockquote>
+<ul>
+<li>直接对一个Block对象使用copy时。</li>
+<li>当Block对象被保存进数组或者是字典中时。</li>
+</ul>
+<p>测试代码<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">NSArray</span> *array;</div><div class="line">   <span class="built_in">NSMutableArray</span> *mutableArray;</div><div class="line">   <span class="built_in">NSArray</span> *array1;    </div><div class="line">   <span class="built_in">NSDictionary</span> *dictory;</div><div class="line">   <span class="built_in">NSMutableDictionary</span> *mutableDic;</div><div class="line"></div><div class="line">   <span class="comment">//block 存入数组、字典时，会自动从栈转移到堆上</span></div><div class="line">   array = [[<span class="built_in">NSArray</span> alloc]initWithObjects:^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);        </div><div class="line">   &#125;, <span class="literal">nil</span>];</div><div class="line">   </div><div class="line">   array1 = @[^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);</div><div class="line">   &#125;];</div><div class="line">   mutableArray = [[<span class="built_in">NSMutableArray</span> alloc]init];</div><div class="line">   [mutableArray addObject:^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);</div><div class="line">   &#125;];</div><div class="line">   dictory = @&#123;<span class="string">@"block"</span>:^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);        </div><div class="line">   &#125;&#125;;</div><div class="line">   mutableDic = [[<span class="built_in">NSMutableDictionary</span> alloc]init];</div><div class="line">   [mutableDic setObject:^(<span class="keyword">int</span> a)&#123;</div><div class="line">       <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);      </div><div class="line">   &#125; forKey:<span class="string">@"block"</span>];</div><div class="line"></div><div class="line"></div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"array %@"</span>,[array objectAtIndex:<span class="number">0</span>]);</div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"array1 %@"</span>,[array1 objectAtIndex:<span class="number">0</span>]);</div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"mutableArray %@"</span>,[mutableArray objectAtIndex:<span class="number">0</span>]);</div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"dictory %@"</span>,[dictory objectForKey:<span class="string">@"block"</span>]);</div><div class="line">   <span class="built_in">NSLog</span>(<span class="string">@"mutabledictory %@"</span>,[mutableDic objectForKey:<span class="string">@"block"</span>]);</div></pre></td></tr></table></figure></p>
+<p>测试结果<br><img src="http://i1.piimg.com/93e0adb644bc6058.png"></p>
+<ul>
+<li>当Block对象作为一个函数参数传递时，无论函数参数变量是weak还是strong，Block对象的类型都不会被改变。</li>
+</ul>
+<p>测试代码<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^blk)(<span class="keyword">int</span> a);</div><div class="line">- (<span class="keyword">void</span>)test</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> b;</div><div class="line">    blk   block1 = ^(<span class="keyword">int</span> a)&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%d,%d"</span>,a,b);</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    blk  globaBlock = ^(<span class="keyword">int</span> a)&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%d"</span>,a</div><div class="line">              );</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    <span class="comment">//被设置在堆上的block对象</span></div><div class="line">    [<span class="keyword">self</span> testBlock:block1];</div><div class="line">    [<span class="keyword">self</span> testBlock1:block1];</div><div class="line">    </div><div class="line">    <span class="comment">//被设置在栈上的block对象</span></div><div class="line">    [<span class="keyword">self</span> testBlock:^(<span class="keyword">int</span> a)&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);</div><div class="line">    &#125;];</div><div class="line">    [<span class="keyword">self</span> testBlock1:^(<span class="keyword">int</span> a)&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);</div><div class="line">    &#125;];</div><div class="line"></div><div class="line">    <span class="comment">//被设置在数据区域的block对象</span></div><div class="line">    [<span class="keyword">self</span> testBlock:globaBlock];</div><div class="line">    [<span class="keyword">self</span> testBlock1:globaBlock];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)testBlock:(blk __<span class="keyword">strong</span>)block</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"参数变量 __strong = %@"</span>,block);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)testBlock1:(blk __<span class="keyword">weak</span>)block</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"参数变量 __weak = %@"</span>,block);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>测试结果<br><img src="http://i1.piimg.com/22c6ea6d358da27a.png"></p>
+<ul>
+<li>当函数返回一个block对象时，该block对象会被复制到堆上</li>
+</ul>
+<p>测试代码<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^blk)(<span class="keyword">int</span> a);</div><div class="line">- (blk)returnBlock</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> b;</div><div class="line">    <span class="keyword">return</span> ^(<span class="keyword">int</span> a)&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d %d"</span>,a,b);</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">- (blk)returnGlobaBlock</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> ^(<span class="keyword">int</span> a)&#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"block 2 = %d"</span>,a);</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">- (<span class="keyword">void</span>)test</div><div class="line">&#123;</div><div class="line">	<span class="built_in">NSLog</span>(<span class="string">@"函数返回的 block %@"</span>,[<span class="keyword">self</span> returnBlock]);</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"函数返回的 全局 block %@"</span>,[<span class="keyword">self</span> returnGlobaBlock]);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>测试结果<br><img src="http://i1.piimg.com/e8548f0a06159412.png"></p>
+<h3 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h3><ol>
+<li>当我使用将Block变量赋值的weak变量时，我尝试通过weak变量来调用block对象，发现程序并没有崩溃，block对象能够正常运行，当我查看了下block对象的引用计数后，发现其引用计数为1。</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li>Objective-C高级编程 － iOS与OS X多线程和内存管理</li>
+<li><a href="http://www.jianshu.com/p/e03292674e60" target="_blank" rel="external">让我们来深入浅出block吧
+</a></li>
+<li><a href="http://blog.devtang.com/2013/07/28/a-look-inside-blocks/" target="_blank" rel="external">谈Objective-C block的实现</a></li>
+<li><a href="http://zhshijie.github.io/2016/01/10/Block/" target="_blank" rel="external">Block</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS-block/" rel="tag"># iOS - block</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/17/ViewController-life-cycle/" rel="next" title="ViewController的生命周期">
+                <i class="fa fa-chevron-left"></i> ViewController的生命周期
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/24/源代码学习笔记/" rel="prev" title="AFNetworking 3.0 源代码学习笔记">
+                AFNetworking 3.0 源代码学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/19/block在被copy的时间点/"
+           data-title="block被copy的时间点" data-url="http://yoursite.com/2016/04/19/block在被copy的时间点/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="WillToSky" />
+          <p class="site-author-name" itemprop="name">WillToSky</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Block对象什么情况下会被copy"><span class="nav-number">1.</span> <span class="nav-text">Block对象什么情况下会被copy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-的类"><span class="nav-number">1.1.</span> <span class="nav-text">Block 的类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-什么时候会被复制"><span class="nav-number">1.2.</span> <span class="nav-text">Block 什么时候会被复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#疑问"><span class="nav-number">1.3.</span> <span class="nav-text">疑问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">2.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WillToSky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"willtosky"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

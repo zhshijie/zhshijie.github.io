@@ -1,0 +1,785 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OpenGL ES,计算机图形学," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="有关OpenGL ES纹理的相关知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGLES学习（纹理篇）">
+<meta property="og:url" content="http://yoursite.com/2016/10/09/OpenGLES学习（纹理篇）/index.html">
+<meta property="og:site_name" content="WillToSky">
+<meta property="og:description" content="有关OpenGL ES纹理的相关知识点">
+<meta property="og:updated_time" content="2016-10-09T06:55:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGLES学习（纹理篇）">
+<meta name="twitter:description" content="有关OpenGL ES纹理的相关知识点">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/09/OpenGLES学习（纹理篇）/"/>
+
+
+
+
+
+  <title> OpenGLES学习（纹理篇） | WillToSky </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bb1aa8ec5764977520de27eaccc4124a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">WillToSky</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">学习反思之路</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/09/OpenGLES学习（纹理篇）/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="WillToSky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="WillToSky">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="WillToSky" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenGLES学习（纹理篇）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-09T14:52:40+08:00">
+                2016-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机图形学/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机图形学</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/计算机图形学/OpenGL-ES/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenGL ES</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/09/OpenGLES学习（纹理篇）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/09/OpenGLES学习（纹理篇）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  有关OpenGL ES纹理的相关知识点
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="纹理的基础知识"><a href="#纹理的基础知识" class="headerlink" title="纹理的基础知识"></a>纹理的基础知识</h3><h4 id="2D-纹理"><a href="#2D-纹理" class="headerlink" title="2D 纹理"></a>2D 纹理</h4><p>2d纹理是OpenGlES中最基础和普遍的一种纹理结构。一个2d纹理，就是图片的数据的一个二维数组。纹理中每一个独立的数据单元被称为<code>texels</code>(“texture pixels”的缩写)。OpenGLES中纹理图像数据可变被许多种不同的基本格式描绘。</p>
+<p>根据图像的基本类型和图像的数据类型，决定了图像中的每一个texel。</p>
+<p>当渲染2D纹理是，纹理的坐标将成为索引。2D纹理的坐标轴别是（s，t）或者是（u，v）。这个坐标轴是规范化的，即坐标的大小在0.0~1.0之间。取纹理图像的左下角为坐标原点（0.0，0.0）</p>
+<p>坐标超过[0.0,1.0]的范围是允许的，而对与超出范围的内容的操作，取决于纹理的包装方式（wrapping mode）</p>
+<h4 id="立方体贴图纹理（Cubemap-Texttures）"><a href="#立方体贴图纹理（Cubemap-Texttures）" class="headerlink" title="立方体贴图纹理（Cubemap Texttures）"></a>立方体贴图纹理（<code>Cubemap Texttures</code>）</h4><p>OpenGL ES 3.0 支持立方体贴图纹理。最基本的，一个立方体纹理由6个独立的2D纹理面组成。每一个2D纹理都是立方体的一个平面。虽然立方体贴图在3D渲染中有了多元化的进步，但是最普遍的还是被用在环境贴图中。典型的，在环境贴图中，将一台摄像机放置场景的中心点，拍摄6个方位的图像并保存。</p>
+<p>立体贴图中的Texels通过使用一个3D的向量（s，t，r）来定位。定位时，先根据r确定是6个平面的哪一个平面，在根据（s，t）确定平面上的一点。</p>
+<p>立体贴图纹理的每一个平面都必须是正方形的。</p>
+<h4 id="3D纹理"><a href="#3D纹理" class="headerlink" title="3D纹理"></a>3D纹理</h4><p>3D纹理可以看做是2D纹理多个切片的一个数组。将2D纹理当做的一个面，将面叠加起来，便是一个立体。这个立体就是3D纹理。3D纹理使用一个3元坐标（s,t,r），r坐标决定哪一个切面，（s,t）决定在这个切面中的坐标。</p>
+<h4 id="2D纹理数组"><a href="#2D纹理数组" class="headerlink" title="2D纹理数组"></a>2D纹理数组</h4><p>2D纹理数组和3D纹理很类似，当时一个3D纹理是表示一张图像，而一个2D纹理数组，则是表示一组2D图像形成的动画序列。</p>
+<h4 id="纹理对象和加载纹理"><a href="#纹理对象和加载纹理" class="headerlink" title="纹理对象和加载纹理"></a>纹理对象和加载纹理</h4><p>一个纹理对象是一个存储将要被渲染的纹理数据的<strong>容器</strong>，包括了图片数据，过滤方式和封装方式。在OpenGLES中，一个纹理对象通过一个非负整数来标识，这个数是这个纹理对象的一个句柄。生产纹理的函数是<code>glGenTextures</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">void glGenTextures(GLsizei n, GLuint *textures)</div><div class="line"></div><div class="line">n 	指定生产的纹理对象的数量</div><div class="line">textures 一个非负整数数组，用了存储n个纹理对象的ID</div></pre></td></tr></table></figure>
+<p>通过<code>glGenTextures</code>创建了空的容器，将会被拿去加载纹理数据和参数。当程序不在需要时，需要将纹理对象删除。通过<code>glDeleteTextures</code>实现。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void glDeleteTextures(GLsizei n, Gluint *textures)</div><div class="line">n 	指定删除的纹理对象的数量</div><div class="line">textures 一个非负整数数组，用了存储n个纹理对象的ID</div></pre></td></tr></table></figure>
+<p>当一个纹理对象的id被<code>glGenTextures</code>创建后，程序必须将该纹理进行绑定。只有该纹理被绑定后，后续的操作例如<code>glTexImage2D</code>和<code>glTexParameter</code>才能影响到绑定的纹理对象。执行绑定功能的函数是<code>glBindTexture</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">void glBindTexture(GLenum target, GLuint texture)</div><div class="line"></div><div class="line">target 	将纹理对象和目标GL_TEXTURE_2D, 				GL_TEXTURE_3D,GL_TEXTURE_2D_ARRAY或GL_TEXTURE_CUBE_MAP进行绑			定</div><div class="line">texture 	进行绑定的纹理的句柄</div></pre></td></tr></table></figure>
+<p>一旦纹理被绑定到一个指定的纹理目标，这个纹理对象将会一直维持对这个目标的绑定直到被删除。在创建一个纹理目标并绑定后，下一步便是使用纹理去加载图片数据。一个基本的加载2D和立体贴图纹理的函数是<code>glTexImage2D</code>。另外，在OpenGl ES 3.0 中有几个可以替代的函数，这些函数被用于指定的2D纹理，包括使用不可变纹理<code>glTexStorage2D</code>和<code>glTexSubImage2D</code>的结合。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">void glTextImage2D (GLenum target, GLint level,</div><div class="line">						GLenum internalFormat, GLsizei width,</div><div class="line">						GLsizei height, GLint border,</div><div class="line">						Glenum formate, Glenum type</div><div class="line">						const void * pixels)</div><div class="line"></div><div class="line">target 	指定纹理的目标，包括GL_TEXTURE_2D或立体贴图面目标中的一个(GL_TEXTURE_CUBE_MAP_POSITIVE_X,GL_TEXTURE_CUBE_MAP_NEGATIVE_X,等等).</div><div class="line">level 		指定哪一个级别的mip将被加载。第一个等级被指定为0</div><div class="line">internalFormat 纹理存储的内部格式。包括了无大小限制的内部格式和有大小限制的格式。无大小内部格式包括 GL_RGBA, GL_RGB, GL_LUMINANCE_ALPHA GL_LUMINANCE, GL_ALPHA 有大小的内部格式包括 GL_R8, GL_R8_SNORM, GL_R16F, GL_R32FGL_R8UI, GL_R16UI, GL_R32UI, GL_R32IGL_RG8, GL_RG8_SNORM, GL_RG16F, GL_RG32F GL_RG8UI, GL_RG8I, GL_RG16UI, GL_RG32UI GL_RG32I, GL_RGB8, GL_SRGB8, GL_RGB565 GL_RGB8_SNORM, GL_R11F_G11F_B10FGL_RGB9_E5, GL_RGB16F, GL_RGB32FGL_RGB8UI, GL_RGB16UI, GL_RGB16I, GL_RGB32UI GL_RGB32I, GL_RGBA8, GL_SRGB8_ALPHA8 GL_RGBA8_SNORM, GL_RGB5_A1, GL_RGBA4 GL_RGB10_A2, GL_RGBA16F, GL_RGBA32F GL_RGBA8UI, GL_RGBA8I, GL_RGB10_A2UI GL_RGBA16UI, GL_RGBA16I, GL_RGBA32I GL_RGBA32UI, GL_DEPTH_COMPONENT16 GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT32F GL_DEPTH24_STENCIL8, GL_DEPTH24F_STENCIL8</div><div class="line"></div><div class="line">width  图片的像素宽度</div><div class="line">heigth 图片的像素高度</div><div class="line">border 必须为0</div><div class="line">formate 输入纹理数据的格式，可能是GL_RED </div><div class="line">GL_RED_INTEGER</div><div class="line">GL_RG</div><div class="line">GL_RG_INTEGER</div><div class="line">GL_RGB</div><div class="line">GL_RGB_INTEGER</div><div class="line">GL_RGBAGL_RGBA_INTEGERGL_DEPTH_COMPONENTGL_DEPTH_STENCIL</div><div class="line">GL_LUMINANCE_ALPHAGL_ALPHA</div><div class="line"></div><div class="line">type 输入的像素数据的类型；可能是</div><div class="line">				  GL_UNSIGNED_BYTE               GL_BYTE               GL_UNSIGNED_SHORT               GL_SHORT               GL_UNSIGNED_INT               GL_INT               GL_HALF_FLOAT               GL_FLOAT               GL_UNSIGNED_SHORT_5_6_5               GL_UNSIGNED_SHORT_4_4_4_4               GL_UNSIGNED_SHORT_5_5_5_1               GL_UNSIGNED_INT_2_10_10_10_REV               GL_UNSIGNED_INT_10F_11F_11F_REV               GL_UNSIGNED_INT_5_9_9_9_REV               GL_UNSIGNED_INT_24_8               GL_FLOAT_32_UNSIGNED_INT_24_8_REV               GL_UNSIGNED_SHORT_5_6_5</div><div class="line"></div><div class="line">pixels 包含了图片的像素数据。这个数据必须包含了（width*height）个像素，每个像素根据指定的格式和类型占用一定的字节，像素行必须用GL_UNPACK_ALIGNMENT设置glPixelStorei设置对齐</div></pre></td></tr></table></figure>
+<p>和纹理加载相关的函数，还有一个<code>glPixelStorei</code>,该函数决定了像素数据存储方式。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">void glPixelStorei(GLenum pname , GLint param)</div><div class="line"></div><div class="line">pname 指定像素存储类型。下面的可选参数将影响当glTexImage2D, glTexImage3D, glTexSubImage2D, 和 glTexSubImage3D被调用时，数据如何从内存中被解包：GL_UNPACK_ROW_LENGTH, GL_UNPACK_IMAGE_HEIGHT, GL_UNPACK_SKIP_PIXELS, GL_UNPACK_SKIP_ROWS, GL_UNPACK_SKIP_IMAGES, GL_UNPACK_ALIGNMENT</div><div class="line">	下列可选参数将影响glReadPixels被调用时，数据如何被打包读入内存：GL_PACK_ROW_LENGTH, GL_PACK_IMAGE_HEIGHT, GL_PACK_SKIP_PIXELS, GL_PACK_SKIP_ROWS, GL_PACK_SKIP_IMAGES, GL_PACK_ALIGNMENT</div><div class="line">	</div><div class="line">param 为打包或解包指定的整形数值。</div></pre></td></tr></table></figure>
+<p>GL_PACK_xxxxx对纹理的更新没有任何影响。实际上，除了<code>GL_UNPACK_ALIGNMENT</code>，其他的可选选项很少被使用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">glPixelStorei(GL_UNPACK_ALIGNMENT, <span class="number">1</span>);</div></pre></td></tr></table></figure>
+<p>意味着每一个像素行从字节边界开始，换而言之，数据被紧密打包。该值的默认值是4，表示像素行被认定从4字节的边界开始。</p>
+<h4 id="纹理过滤和mip贴图"><a href="#纹理过滤和mip贴图" class="headerlink" title="纹理过滤和mip贴图"></a>纹理过滤和mip贴图</h4><p>纹理坐标用于生成一个2D索引，从纹理贴图中读取。当缩小和放大过滤器设置为<code>GL_NEAREST</code>时，就会发生这样的情况：一个texels将在提供的纹理坐标位置上读取。这样称作点采样或最近采样。</p>
+<p>然而，最近采样可能产生视觉伪像。一个伪像的产生是因为一个图像在屏幕中变小，导致像素之间的纹理坐标产生了巨大跳跃。这造成了从一个张巨大的纹理图中读取了少量的采用点，从而导致了锯齿伪像的产生。</p>
+<p>解决这一问题的方法是，采用mip贴图。所谓的mip贴图，就是通过当前的屏幕分辨率，生成较低的屏幕分辨率的图片，形成一个图片链。比如现在有一张64*64的图片，采用mip贴图，会生成32*32,16*16,8*8,4*4,2*2,1*1,等低分辨率的图片。这些图片中，最原始的被称为0级层。每低一个低级的层，都是由上等级的图片生成的，像素合并规则是，将每个图层的2*2的像素点相加取平均值，作为下一层的一个像素点。</p>
+<p>缩小过滤发生在屏幕中的多边形小于纹理大大小时。放大过滤发生在屏幕中多边大于纹理的大小时。对于放大过滤，mip贴图没有影响。对于缩小过滤，mip贴图可以保证像素的平滑</p>
+<p>通过<code>glTexParameter[i|f][v]</code>来设置纹理的的参数</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">void glTexParameteri(GLenum target, GLenum pname, GLint param)void glTexParameteriv(GLenum target, GLenum pname, const GLint *params)void glTexParameterf(GLenum target, GLenum pname, GLfloat param)void glTexParameterfv(GLenum target, GLenum pname, const GLfloat *params)</div><div class="line"></div><div class="line">target 纹理目标</div><div class="line">pname 进行设置的纹理属性，可以包括</div><div class="line">		GL_TEXTURE_BASE_LEVELGL_TEXTURE_COMPARE_FUNCGL_TEXTURE_COMPARE_MODEGL_TEXTURE_MIN_FILTERGL_TEXTURE_MAG_FILTERGL_TEXTURE_MIN_LODGL_TEXTURE_MAX_LODGL_TEXTURE_MAX_LEVELGL_TEXTURE_SWIZZLE_RGL_TEXTURE_SWIZZLE_GGL_TEXTURE_SWIZZLE_BGL_TEXTURE_SWIZZLE_AGL_TEXTURE_WRAP_SGL_TEXTURE_WRAP_TGL_TEXTURE_WRAP_R</div><div class="line"></div><div class="line">params 指定属性的参数</div></pre></td></tr></table></figure>
+<p>对于放大过滤<code>GL_TEXTURE_MAG_FILTER</code>,可以设置为<code>GL_NEAREST</code>或者是<code>GL_LINEAR</code>。<br>对于缩小过滤<code>GL_TEXTURE_MIN_FILTER</code>，可以设置的值如下</p>
+<ul>
+<li><code>GL_NEAREST</code> 表示根据纹理坐标，获取最近的一个纹理样本</li>
+<li><code>GL_LINEAR</code> 根据纹理坐标，采用2次采样方法，获取纹理样本</li>
+<li><code>GL_NEAREST_MIPMAP_NEAREST</code> 根据纹理坐标，从最近的mip贴图层中获取一个点样本</li>
+<li><code>GL_NEAREST_MIPMAP_LINEAR</code> 根据纹理坐标，获取2个最近的mip图层的采样点，并取2个样本之间的插值</li>
+<li><code>GL_LINEAR_MIPMAP_NEAREST</code> 根据纹理坐标，采用二次线性插值从最近的mip层中获取一个点样本</li>
+<li><code>GL_LINEAR_MIPMAP_LINEAR</code> 根据纹理坐标，获取最近2个mip图层中采用二次线性获取的采用点，并取2个采用点之间的插值</li>
+<li></li>
+</ul>
+<h4 id="自动生成Mip贴图"><a href="#自动生成Mip贴图" class="headerlink" title="自动生成Mip贴图"></a>自动生成Mip贴图</h4><p>OpenGL ES 3.0 中提供了一个自动生成mip贴图的方法<code>glGenerateMipmap</code>;</p>
+<h4 id="纹理坐标的封装"><a href="#纹理坐标的封装" class="headerlink" title="纹理坐标的封装"></a>纹理坐标的封装</h4><p>纹理封装方式(<code>Texture wrap modes</code>)被用于指定超出纹理坐标限定范围[0.0,1.0]的行为。通过<code>glTexParameter[i|f][v]</code>可以设置纹理封装方式。这些mode可以独立设置s坐标轴，t坐标轴和r坐标轴。例如<code>GL_TEXTURE_WRAP_S</code>mode定义了s坐标超出[0.0,1.0]的行为。同样的<code>GL_TEXTURE_WRAP_T</code>和<code>GL_TEXTURE_WRAP_R</code>分别定义了t坐标和r坐标的超出[0.0,1.0]的行为。</p>
+<p>在OpenGL ES 3.0 中，有3中mode值可以设置。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GL_REPEAT      重复纹理</div><div class="line">GL_CLAMP_TO_EDGE  限定读取纹理的边缘</div><div class="line">GL_MIRRORED_REPEAT 重复纹理和镜像</div></pre></td></tr></table></figure>
+<h4 id="纹理的调配"><a href="#纹理的调配" class="headerlink" title="纹理的调配"></a>纹理的调配</h4><p>纹理调配控制输入的R，RG，RGB或RBGA纹理中的颜色分量在着色器中读取时如何映射到分量。通过调用<code>glTexParameter[i|f][v]</code>来设置纹理调配，key可以设置为GL_TEXTURE_SWIZZLE_R, GL_TEXTURE_SWIZZLE_G, GL<em>TEXTURE</em> SWIZZLE_B, 或 GL_TEXTURE_SWIZZLE_A，而value可能分别从R，G，B，A分量读取的GL_RED, GL_GREEN, GL_BLUE, 或 GL_ALPHA。也可以通过GL_ZERO和GL_ONE将值设置为0或1</p>
+<h4 id="纹理细节级别"><a href="#纹理细节级别" class="headerlink" title="纹理细节级别"></a>纹理细节级别</h4><p>在一些程序中，在所有的纹理mip贴图都可以使用前就能够开始在屏幕上进行显示的功能是很有用的。比如GPS的程序，可以先显示低等级的mip贴图，等到所有的mip贴图都下载后，在显示高清的mip贴图。可以通过<code>glTexParameter[i|f][v]</code>中的<code>GL_TEXTURE_BASE_LEVEL</code>来设置可以被使用的最大mip贴图等级。默认是0。同样的，<code>GL_TEXTURE_MAX_LEVEL</code>设置了最小的mip贴图等级，默认是1000。</p>
+<p>为了选择用于渲染的mip贴图级别，OpenGL ES自动计算一个细节级别（LOD）的值。这个浮点值决定了哪一mip贴图级别被筛选出来。一个程序能够控制LOD值的最大和最小值。通过设置<code>GL_TEXTURE_MIN_LOD</code>和<code>GL_TEXTURE_MAX_LOD</code>。</p>
+<h4 id="在着色器中使用纹理"><a href="#在着色器中使用纹理" class="headerlink" title="在着色器中使用纹理"></a>在着色器中使用纹理</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">// Vertex shader#version 300 eslayout(location = 0) in vec4 a_position;layout(location = 1) in vec2 a_texCoord;out vec2 v_texCoord;void main()&#123;   gl_Position = a_position;   v_texCoord = a_texCoord;&#125;// Fragment shader#version 300 esprecision mediump float;in vec2 v_texCoord;layout(location = 0) out vec4 outColor;uniform sampler2D s_texture;void main() &#123;   outColor = texture( s_texture, v_texCoord );&#125;</div></pre></td></tr></table></figure>
+<p>碎片着色器中的<code>texture</code>函数，表示从指定的纹理单元中，根据输入的坐标，映射出纹理中相应的<code>vec4</code>颜色。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vec4 texture(sampler2D sampler, vec2 coord[, float bias])</div><div class="line"></div><div class="line">sampler 采样器，指定的纹理单元的编号</div><div class="line"></div><div class="line">coord  2D纹理的坐标</div><div class="line">bias   可选参数，提供用于纹理读取的mip贴图偏值。这运行着色器明确偏置用于mip贴图选择的LOD计算值</div></pre></td></tr></table></figure>
+<p>在sampler参数需要传入的纹理单元编号前，需要先激活一个纹理单元，并将纹理绑定到该纹理单元上。使用<code>glActiveTexture</code>进行激活</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void glActiveTexture(GLenum texture)texture  激活纹理单元，GL_TEXTURE0, GL_TEXTURE1, ... , GL_TEXTURE31分别代表纹理单元0到31</div></pre></td></tr></table></figure>
+<p>使用<code>glActiveTexture</code>激活一个纹理单元后，便可使用<code>glBindTexture</code>将指定的纹理绑定到该纹理单元上。具体代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// Get the sampler locationsuserData-&gt;samplerLoc = glGetUniformLocation(                              userData-&gt;programObject,                              “s_texture”);// ...// Bind the textureglActiveTexture(GL_TEXTURE0); </div><div class="line">glBindTexture(GL_TEXTURE_2D, userData-&gt;textureId);</div><div class="line">// Set the sampler texture unit to 0glUniformli(userData-&gt;samplerLoc, 0);</div></pre></td></tr></table></figure>
+<p>加载立体贴图，3D纹理和2D纹理数组，也是同样的操作，对应的<code>texture</code>分别为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vec4 texture(samplerCube sampler, vec3 coord[, float bias])</div><div class="line">vec4 texture(sampler3D sampler, vec3 coord[, float bias])vec4 texture(sampler2DArray sampler, vec3 coord[, float bias])</div></pre></td></tr></table></figure>
+<h3 id="压缩纹理"><a href="#压缩纹理" class="headerlink" title="压缩纹理"></a>压缩纹理</h3><p>OpenGL ES 3.0 支持2中压缩算法-EAC和ETC2。EAC版本用于压缩1到2频道的数据。ETC2版本用于压缩3到4频道的数据。使用<code>glCompressedTexImage2D</code>可以读取压缩的2D纹理和立体贴图纹理。使用<code>glCompressedTexImage3D</code>读取已压缩的2D纹理数组。<strong>注意：ETC2/EAC不支持3D纹理压缩，但是使用glCompressedTexImage3D可以加载指定供应商的3D纹理压缩格式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">void glCompressedTexImage2D(GLenum target, GLint level, </div><div class="line">								GLenum internalFormat,</div><div class="line">								GLsizei width, GLsizei height,</div><div class="line">								GLint border, GLsizei imageSize, </div><div class="line">								const void *data)void glCompressedTexImage3D(GLenum target, GLint level, </div><div class="line">								GLenum internalFormat,</div><div class="line">								GLsizei width, GLsizei height,</div><div class="line">								GLsizei depth, GLint border, </div><div class="line">								GLsizei imageSize,</div><div class="line">								const void *data)</div><div class="line">								</div><div class="line">target  指定纹理目标</div><div class="line">level 	  指定加载的mip级别，默认是0</div><div class="line">internalFormat   纹理的内部存储格式</div><div class="line">width			图片的像素宽度</div><div class="line">height			图片的像素高度</div><div class="line">depth 			图片的像素深度</div><div class="line">border			必须设置为0</div><div class="line">imageSize		图片的字节大小</div><div class="line">data			压缩后的图片数据</div></pre></td></tr></table></figure>
+<p>可以通过<code>glGetIntegerv</code>传入<code>GL_COMPRESSED_TEXTURE_FORMATS</code>进行查询支持的压缩格式，该函数会返回一个<code>GLenum</code>的数组。</p>
+<h4 id="纹理子图像规范"><a href="#纹理子图像规范" class="headerlink" title="纹理子图像规范"></a>纹理子图像规范</h4><p>在使用<code>glTexImage2D</code>更新一张纹理图片后，可能需要更新图片的一部分。这时候可以使用<code>glTexSubImage2D</code>来来自2D纹理图像的一部分。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">void glTexSubImage2D (GLenum target, GLint level,</div><div class="line">							GLInt xoffset, GLint yoffset</div><div class="line">							GLsizei width, GLsizei height,</div><div class="line">							GLenum format, Glenum type,</div><div class="line">							const void *pixels)</div><div class="line">							</div><div class="line">target 纹理目标</div><div class="line">level  mip贴图级别</div><div class="line">xoffset 开始进行更新的x序列号</div><div class="line">yoffset 开始进行更新的y序列号</div><div class="line">width	  进行更新的图像子区域的宽度</div><div class="line">heigth   进行更新的图像子区域的高度</div><div class="line">formate  输入纹理数据的格式</div><div class="line">type    输入像素数据的类型</div><div class="line">pixels  包含图像子区域的像素数据</div></pre></td></tr></table></figure>
+<p>这个函数将会更新区域（xoffset，yoffset）到（xoffset+width-1，yoffset+height-1）。<strong>注意:使用这个函数，纹理必须依据被指定，而且子图片的范围必须在指定的纹理图片之内，pixels的对其方式必须被指定为GL_UNPACK_ALIGNMENT</strong></p>
+<p>同样的原理，可以使用<code>glCompressedTexSubImage2D</code>更新压缩过的图片，使用它<code>glTexSubImage3D</code>更新3D纹理或2D纹理数组，使用<code>glCompressedTexSubImage3D</code>更新压缩过的2D纹理数组。</p>
+<h4 id="从颜色缓冲区复制纹理数据"><a href="#从颜色缓冲区复制纹理数据" class="headerlink" title="从颜色缓冲区复制纹理数据"></a>从颜色缓冲区复制纹理数据</h4><p><code>glReadBuffer</code>指定被复制的颜色缓存区。然后通过<code>glCopyTexImage2D, glCopyTexSubImage2D,和 glCopyTexSubImage3D</code>从指定的颜色缓冲区张读取纹理数据</p>
+<h4 id="采样器对象"><a href="#采样器对象" class="headerlink" title="采样器对象"></a>采样器对象</h4><p>为了减少大量纹理上使用相同的设置的开销。引入了采样器对象，将采样器状态与纹理状态分离。简而言之，所有可用<code>glTexParameter[i|f][v]</code>设置都可以对采样器对象进行设置。可以在一次函数调用中与纹理单元绑定使用。</p>
+<p><code>glGenSamplers</code>用于创建采用器，使用<code>glDeleteSamplers</code>删除采样器。使用<code>glBindSampler</code>将采样器与纹理单元进行绑定。使用<code>glSamplerParameter[f|i][v]</code>设置采样器参数。</p>
+<h4 id="不可变纹理"><a href="#不可变纹理" class="headerlink" title="不可变纹理"></a>不可变纹理</h4><p>由于应用程序使用<code>glTexImage2D</code>和<code>glTexImage3D</code>等函数独立指定纹理的每个mip贴图的级别。这导致了驱动程序无法在绘图之前确定纹理是否完全指定。也就是说，它必须检查每一个mip贴图级别或者子图像的格式是否相符、每一个级别的大小是否正确以及是否有足够的内存。这种绘图时检查可能代价很高，而使用不可变纹理可以避免这种情形。</p>
+<p>不可变纹理的思路很简单：程序在加载数据之前指定纹理的格式和大小。OpenGL ES的驱动可以提前进行一致性和内存检查。一旦纹理不可变，它的格式和尺寸也就不能改变。然而程序仍然可以通过使用<code>glTexSubImage2D, glTexSubImage3D,或 glGenerateMipMap</code>来加载纹理。</p>
+<p>为了创建不可变纹理，程序必须先使用<code>glBindTexture</code>绑定当前纹理，在调用<code>glTexStorage2D</code>或<code>glTexStorage3D</code>创建不可变的存储空间。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenGL-ES/" rel="tag"># OpenGL ES</a>
+          
+            <a href="/tags/计算机图形学/" rel="tag"># 计算机图形学</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/05/SWSTMeidaManager重构/" rel="next" title="SWSTMeidaManager重构">
+                <i class="fa fa-chevron-left"></i> SWSTMeidaManager重构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/09/OpenGLES学习（碎片着色器）/" rel="prev" title="OpenGL ES 学习（碎片着色器）">
+                OpenGL ES 学习（碎片着色器） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/09/OpenGLES学习（纹理篇）/"
+           data-title="OpenGLES学习（纹理篇）" data-url="http://yoursite.com/2016/10/09/OpenGLES学习（纹理篇）/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="WillToSky" />
+          <p class="site-author-name" itemprop="name">WillToSky</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#纹理的基础知识"><span class="nav-number">1.</span> <span class="nav-text">纹理的基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2D-纹理"><span class="nav-number">1.1.</span> <span class="nav-text">2D 纹理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#立方体贴图纹理（Cubemap-Texttures）"><span class="nav-number">1.2.</span> <span class="nav-text">立方体贴图纹理（Cubemap Texttures）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3D纹理"><span class="nav-number">1.3.</span> <span class="nav-text">3D纹理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2D纹理数组"><span class="nav-number">1.4.</span> <span class="nav-text">2D纹理数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纹理对象和加载纹理"><span class="nav-number">1.5.</span> <span class="nav-text">纹理对象和加载纹理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纹理过滤和mip贴图"><span class="nav-number">1.6.</span> <span class="nav-text">纹理过滤和mip贴图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动生成Mip贴图"><span class="nav-number">1.7.</span> <span class="nav-text">自动生成Mip贴图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纹理坐标的封装"><span class="nav-number">1.8.</span> <span class="nav-text">纹理坐标的封装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纹理的调配"><span class="nav-number">1.9.</span> <span class="nav-text">纹理的调配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#纹理细节级别"><span class="nav-number">1.10.</span> <span class="nav-text">纹理细节级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在着色器中使用纹理"><span class="nav-number">1.11.</span> <span class="nav-text">在着色器中使用纹理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩纹理"><span class="nav-number">2.</span> <span class="nav-text">压缩纹理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#纹理子图像规范"><span class="nav-number">2.1.</span> <span class="nav-text">纹理子图像规范</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从颜色缓冲区复制纹理数据"><span class="nav-number">2.2.</span> <span class="nav-text">从颜色缓冲区复制纹理数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#采样器对象"><span class="nav-number">2.3.</span> <span class="nav-text">采样器对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不可变纹理"><span class="nav-number">2.4.</span> <span class="nav-text">不可变纹理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WillToSky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"willtosky"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

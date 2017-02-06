@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,缓存," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="SDWebImage中的缓存机制,即`SDImageCache`的相关知识点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDWebImage中的缓存机制">
+<meta property="og:url" content="http://yoursite.com/2016/04/25/SDWebImage中的缓存机制/index.html">
+<meta property="og:site_name" content="WillToSky">
+<meta property="og:description" content="SDWebImage中的缓存机制,即`SDImageCache`的相关知识点">
+<meta property="og:updated_time" content="2016-04-25T13:00:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SDWebImage中的缓存机制">
+<meta name="twitter:description" content="SDWebImage中的缓存机制,即`SDImageCache`的相关知识点">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/04/25/SDWebImage中的缓存机制/"/>
+
+
+
+
+
+  <title> SDWebImage中的缓存机制 | WillToSky </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bb1aa8ec5764977520de27eaccc4124a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">WillToSky</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">学习反思之路</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/25/SDWebImage中的缓存机制/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="WillToSky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="WillToSky">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="WillToSky" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SDWebImage中的缓存机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-25T19:48:15+08:00">
+                2016-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/25/SDWebImage中的缓存机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/25/SDWebImage中的缓存机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  SDWebImage中的缓存机制,即`SDImageCache`的相关知识点
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="SDImageCache"><a href="#SDImageCache" class="headerlink" title="SDImageCache"></a>SDImageCache</h3><p>在<code>SDImageCache</code>，图片采用了二级缓存策略。<br>图片缓存时，在内存有缓存，在磁盘中也有缓存。<br>其中，内存缓存是通过<code>NSCache</code>实现的。</p>
+<h4 id="缓存步骤"><a href="#缓存步骤" class="headerlink" title="缓存步骤"></a>缓存步骤</h4><ol>
+<li>将图片缓存在内存中</li>
+<li>判断图片的格式是png或是jpeg，将图片转化为<code>NSData</code>数据</li>
+<li>如果是在mac_os系统中，直接将图片转化为<code>NSBitmapImageRep</code>数据</li>
+<li>获取图片的存储路径，其中图片的文件名是通过传入的key经过md5加密后获得的。</li>
+<li>将图片存储磁盘中</li>
+</ol>
+<h4 id="获取图片步骤"><a href="#获取图片步骤" class="headerlink" title="获取图片步骤"></a>获取图片步骤</h4><ol>
+<li>先在内存缓存中寻找</li>
+<li>如果内存中找不到图片，则在默认的磁盘根目录中寻找，如果还是找不到，再从自定义的只读目录路径中寻找</li>
+<li>获取图片数据后，将图片数据从<code>NSData</code>转化为<code>UIImage</code>,转化是要根据图片的类型进行转化。</li>
+<li>默认对图片进行解压缩，生成位图图片。</li>
+<li>将位图图片返回。</li>
+</ol>
+<h4 id="图片解压缩步骤"><a href="#图片解压缩步骤" class="headerlink" title="图片解压缩步骤"></a>图片解压缩步骤</h4><ol>
+<li>判断图片是否是动态图片，如果是，则不能解压缩</li>
+<li>判断图片是否是透明的，如果是，则不能解压缩</li>
+<li>判断图片的颜色空间模型是不是RGB，如果不是，不能解压缩</li>
+<li>根据图片的大小创建一个上下文</li>
+<li>将图片绘制在上下文中。</li>
+<li>从上下文中读取一个不透明的位图图像，该图像就是解压缩后的图像</li>
+<li>将位图图像返回</li>
+</ol>
+<h4 id="对图片进行缩放步骤"><a href="#对图片进行缩放步骤" class="headerlink" title="对图片进行缩放步骤"></a>对图片进行缩放步骤</h4><ol>
+<li>如果是普通图像，则直接进行缩放</li>
+<li>如果是动态图像，则要对图像中的每一张图像都进行缩放</li>
+</ol>
+<h4 id="磁盘缓存清理步骤"><a href="#磁盘缓存清理步骤" class="headerlink" title="磁盘缓存清理步骤"></a>磁盘缓存清理步骤</h4><ol>
+<li>获取磁盘中图片的最后修改日期。(为了减少磁盘和内存数据交换，读取是并不将整个文件读入内存，仅仅将文件的一些属性读入内存中，包括最后修改日期，该文件是否为文件夹，文件的大小和对应文件的文件路径)</li>
+<li>根据最后修改日期将图片进行分类，将那些已经存放超过最长存放时间的文件存储在删除数组，其他的文件信息存储在另一个字典中。并计算除去要删除的文件之外的所有文件大小</li>
+<li>根据删除数组中的文件路径，将对应的文件删除。</li>
+<li>判断剩下的文件大小是否超过用户现在的磁盘最大容量。</li>
+<li>如果超过，则将剩余的文件进行安修改时间进行升序排列，然后删除修改时间最早的文件，直到甚剩余文件大小小于最大磁盘容量的一半。</li>
+</ol>
+<h4 id="图片缓存清理时机"><a href="#图片缓存清理时机" class="headerlink" title="图片缓存清理时机"></a>图片缓存清理时机</h4><ol>
+<li>当系统发出内存不足通知时，会将内存中的所有图片缓存都删除掉。</li>
+<li>当程序进入后台时，会对磁盘的文件数据进行清理。</li>
+<li>当收到程序关闭通知时，会对磁盘中的文件数据进行清理。</li>
+</ol>
+<h4 id="如何判断imageData的图片类型。"><a href="#如何判断imageData的图片类型。" class="headerlink" title="如何判断imageData的图片类型。"></a>如何判断imageData的图片类型。</h4><p>根据imageData的第一个字节，可以判断其图片类型。</p>
+<table>
+<thead>
+<tr>
+<th>第一个字节</th>
+<th>图片类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0xFF</td>
+<td>jpeg</td>
+</tr>
+<tr>
+<td>0x89</td>
+<td>png</td>
+</tr>
+<tr>
+<td>0x47</td>
+<td>gif</td>
+</tr>
+<tr>
+<td>0x4D\0x49</td>
+<td>tiff</td>
+</tr>
+<tr>
+<td>0x52</td>
+<td>将imageData的前12个字节转化为字符串，如果是RIFF前缀和WEBP后缀，则图片类型是webp</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS-缓存/" rel="tag"># iOS,缓存</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/25/SDWebImage源码学习-下载/" rel="next" title="SDWebImage源码学习_下载">
+                <i class="fa fa-chevron-left"></i> SDWebImage源码学习_下载
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/15/Swift3-0变化/" rel="prev" title="Swift3.0变化">
+                Swift3.0变化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/25/SDWebImage中的缓存机制/"
+           data-title="SDWebImage中的缓存机制" data-url="http://yoursite.com/2016/04/25/SDWebImage中的缓存机制/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="WillToSky" />
+          <p class="site-author-name" itemprop="name">WillToSky</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SDImageCache"><span class="nav-number">1.</span> <span class="nav-text">SDImageCache</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存步骤"><span class="nav-number">1.1.</span> <span class="nav-text">缓存步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取图片步骤"><span class="nav-number">1.2.</span> <span class="nav-text">获取图片步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图片解压缩步骤"><span class="nav-number">1.3.</span> <span class="nav-text">图片解压缩步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对图片进行缩放步骤"><span class="nav-number">1.4.</span> <span class="nav-text">对图片进行缩放步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#磁盘缓存清理步骤"><span class="nav-number">1.5.</span> <span class="nav-text">磁盘缓存清理步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#图片缓存清理时机"><span class="nav-number">1.6.</span> <span class="nav-text">图片缓存清理时机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何判断imageData的图片类型。"><span class="nav-number">1.7.</span> <span class="nav-text">如何判断imageData的图片类型。</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WillToSky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"willtosky"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

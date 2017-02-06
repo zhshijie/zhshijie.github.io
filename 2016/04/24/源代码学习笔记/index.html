@@ -1,0 +1,828 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS - 网络编程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="AFNetworking 3.0 源代码的学习记录和整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AFNetworking 3.0 源代码学习笔记">
+<meta property="og:url" content="http://yoursite.com/2016/04/24/源代码学习笔记/index.html">
+<meta property="og:site_name" content="WillToSky">
+<meta property="og:description" content="AFNetworking 3.0 源代码的学习记录和整理">
+<meta property="og:image" content="http://blog.cnbang.net/wp-content/uploads/2014/09/AFURLRequestSerialization.png">
+<meta property="og:updated_time" content="2016-04-24T03:13:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AFNetworking 3.0 源代码学习笔记">
+<meta name="twitter:description" content="AFNetworking 3.0 源代码的学习记录和整理">
+<meta name="twitter:image" content="http://blog.cnbang.net/wp-content/uploads/2014/09/AFURLRequestSerialization.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/04/24/源代码学习笔记/"/>
+
+
+
+
+
+  <title> AFNetworking 3.0 源代码学习笔记 | WillToSky </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bb1aa8ec5764977520de27eaccc4124a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">WillToSky</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">学习反思之路</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/24/源代码学习笔记/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="WillToSky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="WillToSky">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="WillToSky" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AFNetworking 3.0 源代码学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-24T10:52:45+08:00">
+                2016-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS-网络编程/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS - 网络编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/04/24/源代码学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/24/源代码学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  AFNetworking 3.0 源代码的学习记录和整理
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="AFHTTPRequestSerializer-笔记"><a href="#AFHTTPRequestSerializer-笔记" class="headerlink" title="AFHTTPRequestSerializer 笔记"></a>AFHTTPRequestSerializer 笔记</h2><h3 id="AFHTTPRequestSerializer"><a href="#AFHTTPRequestSerializer" class="headerlink" title="AFHTTPRequestSerializer"></a>AFHTTPRequestSerializer</h3><p>AFHTTPRequestSerializer － 提供了具体的查询字符串／网址编码参数的序列化 ，和默认的请求头，返回状态和内容类型验证。</p>
+<h4 id="读写属性："><a href="#读写属性：" class="headerlink" title="读写属性："></a>读写属性：</h4><p><code>stringEncoding</code> - 请求参数的编码方式<br><code>allowsCellUlarAcces</code> － 是否允许蜂窝网络<br><code>cachePolicy</code> － 缓存策略<br><code>HTTPShouldHandleCookies</code> － 是否使用cookies<br><code>HTTPShouldUsePipelining</code> 是否直接管道请求<br><code>networkServiceType</code> － 请求网络类型<br><code>timeoutInterval</code> － 请求超时时间<br><code>HTTPMethodsEncodingParametersInURI</code> － 确定哪几种http Method 的参数会被拼接到URI中，默认时 GET、HEAD和DELETE</p>
+<h4 id="只读属性"><a href="#只读属性" class="headerlink" title="只读属性"></a>只读属性</h4><p><code>HTTPRequestHeaders</code> － 请求头内容<br><code>serializer</code> － 创建一个默认的序列化实例</p>
+<h4 id="公开方法："><a href="#公开方法：" class="headerlink" title="公开方法："></a>公开方法：</h4><h5 id="设置请求头"><a href="#设置请求头" class="headerlink" title="设置请求头"></a>设置请求头</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (void)setValue:(nullable NSString *)value</div><div class="line">forHTTPHeaderField:(NSString *)field;</div></pre></td></tr></table></figure>
+<h5 id="获取请求头"><a href="#获取请求头" class="headerlink" title="获取请求头"></a>获取请求头</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (nullable NSString *)valueForHTTPHeaderField:(NSString *)field;</div></pre></td></tr></table></figure>
+<h5 id="设置授权的用户名和密码"><a href="#设置授权的用户名和密码" class="headerlink" title="设置授权的用户名和密码"></a>设置授权的用户名和密码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (void)setAuthorizationHeaderFieldWithUsername:(NSString *)username</div><div class="line">                                       password:(NSString *)password;</div></pre></td></tr></table></figure>
+<h5 id="清除授权的用户名和密码"><a href="#清除授权的用户名和密码" class="headerlink" title="清除授权的用户名和密码"></a>清除授权的用户名和密码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)clearAuthorizationHeader;</div></pre></td></tr></table></figure>
+<h5 id="设置产下字符串的序列化风格"><a href="#设置产下字符串的序列化风格" class="headerlink" title="设置产下字符串的序列化风格"></a>设置产下字符串的序列化风格</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)setQueryStringSerializationWithStyle:(AFHTTPRequestQueryStringSerializationStyle)style;</div></pre></td></tr></table></figure>
+<h5 id="通过block-自定义查询字符串的序列化"><a href="#通过block-自定义查询字符串的序列化" class="headerlink" title="通过block 自定义查询字符串的序列化"></a>通过block 自定义查询字符串的序列化</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- (void)setQueryStringSerializationWithBlock:(nullable NSString * (^)(NSURLRequest *request, id parameters, NSError * __autoreleasing *error))block;</div></pre></td></tr></table></figure>
+<h5 id="创建一个NSMutableURLRequest请求"><a href="#创建一个NSMutableURLRequest请求" class="headerlink" title="创建一个NSMutableURLRequest请求"></a>创建一个NSMutableURLRequest请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- (NSMutableURLRequest *)requestWithMethod:(NSString *)method</div><div class="line">                                 URLString:(NSString *)URLString</div><div class="line">                                parameters:(nullable id)parameters</div><div class="line">                                     error:(NSError * _Nullable __autoreleasing *)error;</div></pre></td></tr></table></figure>
+<h5 id="创建一个Multipart请求"><a href="#创建一个Multipart请求" class="headerlink" title="创建一个Multipart请求"></a>创建一个Multipart请求</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">- (NSMutableURLRequest *)multipartFormRequestWithMethod:(NSString *)method</div><div class="line">                                              URLString:(NSString *)URLString</div><div class="line">                                             parameters:(nullable NSDictionary &lt;NSString *, id&gt; *)parameters</div><div class="line">                              constructingBodyWithBlock:(nullable void (^)(id &lt;AFMultipartFormData&gt; formData))block</div><div class="line">                                                  error:(NSError * _Nullable __autoreleasing *)error;</div></pre></td></tr></table></figure>
+<h5 id="将请求中的数据写入指定文件中，将请求的HTTPBodyStream属性设置为nil，在将请求返回返回"><a href="#将请求中的数据写入指定文件中，将请求的HTTPBodyStream属性设置为nil，在将请求返回返回" class="headerlink" title="将请求中的数据写入指定文件中，将请求的HTTPBodyStream属性设置为nil，在将请求返回返回"></a>将请求中的数据写入指定文件中，将请求的<code>HTTPBodyStream</code>属性设置为<code>nil</code>，在将请求返回返回</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (NSMutableURLRequest *)requestWithMultipartFormRequest:(NSURLRequest *)request</div><div class="line">                             writingStreamContentsToFile:(NSURL *)fileURL</div><div class="line">                                       completionHandler:(nullable void (^)(NSError * _Nullable error))handler;</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="细节知识点"><a href="#细节知识点" class="headerlink" title="细节知识点"></a>细节知识点</h4><ul>
+<li>在AFHTTPRequestSerializer通关KVO来监听<code>allowsCellularAccess</code>、<code>cachePolicy</code>、<code>HTTPShouldHandleCookies</code>、<code>HTTPShouldUsePipelining</code>、<code>networkServiceType</code>、<code>timeoutInterval</code>这几个属性。</li>
+</ul>
+<ul>
+<li><p><code>AFStreamingMultipartFormData</code>实现<code>&lt;AFMultipartFormData&gt;</code>协议的内容。该协议用于当采用multipart请求时，添加上传文件。可以将NSData,文件URL，或是InputStream作为添加内容。</p>
+</li>
+<li><p><code>AFStreamingMultipartFormData</code>实现了<code>&lt;AFMultipartFormData&gt;</code>协议的方法，并且将添加进来的每个数据转化为<code>AFHTTPBodyPart</code>进行保存。最后将所有的数据来源采用<code>AFMultipartBodyStream</code>进行封装，就是在<code>AFMultipartBodyStream</code>类中有一个数组<code>HTTPBodyParts</code>，存储了所有的<code>AFHTTPBodyPart</code>实例。<code>AFMultipartBodyStream</code>是继承至<code>NSInputStream</code>所以要实现<code>&lt;NSStreamDelegate&gt;</code>协议。每次从<code>AFMultipartBodyStream</code>读取数据时，实际上是读取存储在数组<code>HTTPBodyParts</code>里面数据。</p>
+</li>
+<li><p>实际上在<code>AFHTTPBodyPart</code>，所有的数据都会转化为<code>NSInputStream</code>类型。<code>inputStream</code>仅仅保存了数据的实体，至于数据的<code>header</code>和<code>boundary</code>还是保存在<code>AFHTTPBodyPart</code>中</p>
+</li>
+<li><p>这样做的好处是，当文件较大时不用一次性将要上传的文件读入内存，可以分成几个<code>bodyPart</code>，实现分批装入。另外，可以将不同类型的文件一起上传。</p>
+</li>
+</ul>
+<h3 id="AFHTTPRequestSerializer-整理"><a href="#AFHTTPRequestSerializer-整理" class="headerlink" title="AFHTTPRequestSerializer 整理"></a>AFHTTPRequestSerializer 整理</h3><h4 id="AFURLRequestSerialization-协议"><a href="#AFURLRequestSerialization-协议" class="headerlink" title="AFURLRequestSerialization 协议"></a>AFURLRequestSerialization 协议</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (nullable NSURLRequest *)requestBySerializingRequest:(NSURLRequest *)request</div><div class="line">                               withParameters:(nullable id)parameters</div><div class="line">                                        error:(NSError * _Nullable __autoreleasing *)error NS_SWIFT_NOTHROW;</div></pre></td></tr></table></figure>
+<p>该协议定义了将请求参数进行序列化的方法。</p>
+<blockquote>
+<p>什么是请求参数序列化？</p>
+</blockquote>
+<p>参数序列化就是将参数列表转化为NSURLRequest可以使用的字符串数据。<br>在我们常用的参数表示方式是 <code>key:value</code> 形式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@&#123;</div><div class="line">@&quot;name&quot; 	:	@&quot;willtosky&quot;,</div><div class="line">@&quot;age&quot;  	:	@18 ,</div><div class="line">@&quot;friend&quot;	:	@[@&quot;mike&quot;,@&quot;jone&quot;],</div><div class="line">@&quot;address&quot;	:	@&#123;@&quot;home&quot;:@&quot;xx&quot;,@&quot;city&quot;:@&quot;???&quot;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>转化为<code>AFNetworking</code> 中的数据格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@[</div><div class="line">   field:@&quot;name&quot; value:@&quot;willtosky&quot;,</div><div class="line">   field:@&quot;age&quot; value:@18,</div><div class="line">   field:@&quot;friend[]&quot; value:@&quot;mike&quot;,</div><div class="line">   field:@&quot;friend[]&quot; value:@&quot;jone&quot;,</div><div class="line">   field:@&quot;address[@&quot;home&quot;]&quot; value:@&quot;xx&quot;,</div><div class="line">   field:@&quot;address[@&quot;city&quot;]&quot; value:@&quot;???&quot;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>最后转化为NSURLRequest需要的字符串</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">name=willtosky&amp;age=18&amp;friend[]=mike&amp;friend[]=jone&amp;address[home] = xx&amp;address[city]=???</div></pre></td></tr></table></figure>
+<p>对于一般的HTTP请求，如果是GET，就会将参数序列化后的字符串直接拼接在URL后面。如果是POST请求，则会将序列化的字符串直接放在请求体中。并且在请求头中加入<code>Content-Type:application/x-www-form-urlencoded</code>。</p>
+<p>如果是采用json（plist）序列化POST的请求，则直接将json格式的字符串（plist）数据放入请求体中，并且在请求头中加入<code>Content-Type:application/json（application/x-plist）</code>表明内容是json（plist）数据。</p>
+<h4 id="如何将构建Multipart请求"><a href="#如何将构建Multipart请求" class="headerlink" title="如何将构建Multipart请求"></a>如何将构建Multipart请求</h4><h5 id="Multipart协议"><a href="#Multipart协议" class="headerlink" title="Multipart协议"></a>Multipart协议</h5><p>Multipart是HTTP协议为web表单新增的上传文件的协议，协议文档是<a href="https://www.ietf.org/rfc/rfc1867.txt" target="_blank" rel="external">rfc1867</a>，它基于HTTP的POST方法，数据同样是放在body上，跟普通POST方法的区别是数据不是key=value形式，key=value形式难以表示文件实体，为此Multipart协议添加了分隔符，有自己的格式结构，大致如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">—AaB03x</div><div class="line">content-disposition: form-data; name=“name&quot;</div><div class="line">bang</div><div class="line">–AaB03x</div><div class="line">content-disposition: form-data; name=”pic”; filename=“content.txt”</div><div class="line">Content-Type: text/plain</div><div class="line">… contents of bang.txt …</div><div class="line">–AaB03x–</div></pre></td></tr></table></figure>
+<p>以上表示数据name=bang以及一个文件，content.txt是文件名，<code>… contents of bang.txt …</code>是文件实体内容。分隔符—AaB03x是可以自定义的，写在HTTP头部里：</p>
+<p><code>Content-type: multipart/form-data, boundary=AaB03x</code></p>
+<p>每一个部分都有自己的头部，表明这部分的数据类型以及其他一些参数，例如文件名，普通字段的key。最后一个分隔符会多加两横，表示数据已经结束：<code>—AaB03x—</code>。</p>
+<h5 id="AFNetworing中的实现方式"><a href="#AFNetworing中的实现方式" class="headerlink" title="AFNetworing中的实现方式"></a>AFNetworing中的实现方式</h5><h5 id="相关类型解释"><a href="#相关类型解释" class="headerlink" title="相关类型解释"></a>相关类型解释</h5><h6 id="AFMultipartFormData协议"><a href="#AFMultipartFormData协议" class="headerlink" title="AFMultipartFormData协议"></a>AFMultipartFormData协议</h6><p><code>AFMultipartFormData</code>协议声明了为Multipart请求添加数据的方法。可以通过该协议添加3种类型的数据，分别为<code>NSData</code>，<code>NSInputSrteam</code>和<code>NSURL</code>（本地文件路径）。</p>
+<h6 id="AFHTTPBodyPart"><a href="#AFHTTPBodyPart" class="headerlink" title="AFHTTPBodyPart"></a>AFHTTPBodyPart</h6><p><code>AFHTTPBodyPart</code>定义的一个用于存储Multipart请求数据的数据结构，可以通过该类，将3种数据类型（<code>NSData</code>，<code>NSInputSrteam</code>和<code>NSURL</code>）进行封装，转化为<code>AFHTTPBodyPart</code>这一种数据结构。该数据结构保存了其保存的数据的类型，名字等，无论传进来的是什么数据，都会转化为<code>NSInputSteam</code>对象进行保存。这个对象仅仅保存了文件的实体，不包含数据类型以及其它的一些参数。<code>AFHTTPBodyPart</code>是边读取边拼接。</p>
+<h6 id="AFMultipartBodyStream"><a href="#AFMultipartBodyStream" class="headerlink" title="AFMultipartBodyStream"></a>AFMultipartBodyStream</h6><p>对<code>AFHTTPBodyPart</code>的一层封装，是<code>NSInputSrteam</code>的一个子类，实现<code>NSStreamDelegate</code>协议，Multipart请求携带的数据<code>AFHTTPBodyPart</code>都保存在该类的一个数组中，当网络请求开始发送时，会从调用<code>- (NSInteger)read:(uint8_t *)buffer       maxLength:(NSUInteger)length</code>读取数据，会顺序调用<code>AFHTTPBodyPart</code>的数据。</p>
+<h6 id="AFStreamingMultipartFormData"><a href="#AFStreamingMultipartFormData" class="headerlink" title="AFStreamingMultipartFormData"></a>AFStreamingMultipartFormData</h6><p>实现了<code>AFMultipartFormData</code>协议中的添加数据方法，设置了Multipart协议的分割符和保存了Multipart协议的数据来源。</p>
+<h5 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h5><ol>
+<li>通过<code>url</code>生成一个<code>NSMutableURLRequest</code>实例</li>
+<li>通过<code>NSMutableURLRequest</code>实例创建<code>AFStreamingMultipartFormData</code>实例</li>
+<li>向通过<code>AFMultipartFormData</code>协议中的方法，向<code>AFStreamingMultipartFormData</code>的实例添加数据。</li>
+<li>将不同类型的数据转化为<code>AFHTTPBodyPart</code>的实例并保存在<code>AFMultipartBodyStream</code>的实例变量中。</li>
+<li>将<code>AFMultipartBodyStream</code>实例赋值给之前生成的<code>NSMutableURLRequest</code>实例</li>
+</ol>
+<p><a href="http://blog.cnbang.net/wp-content/uploads/2014/09/AFURLRequestSerialization.png" target="_blank" rel="external">图片来这</a><br><img src="http://blog.cnbang.net/wp-content/uploads/2014/09/AFURLRequestSerialization.png" alt="img"></p>
+<hr>
+<h2 id="AFHTTPResponseSerializer笔记"><a href="#AFHTTPResponseSerializer笔记" class="headerlink" title="AFHTTPResponseSerializer笔记"></a>AFHTTPResponseSerializer笔记</h2><h3 id="AFHTTPResponseSerializer"><a href="#AFHTTPResponseSerializer" class="headerlink" title="AFHTTPResponseSerializer"></a>AFHTTPResponseSerializer</h3><p><code>AFHTTPResponseSerializer</code>是对请求返回的数据NSData进行处理</p>
+<h4 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (BOOL)validateResponse:(nullable NSHTTPURLResponse *)response</div><div class="line">                    data:(nullable NSData *)data</div><div class="line">                   error:(NSError * _Nullable __autoreleasing *)error;</div></pre></td></tr></table></figure>
+<p>该方法检查返回数据的有效性，当返回数据的类型是<code>acceptableContentTypes</code>集合中的一种，并且返回的状态码是<code>acceptableStatusCodes</code>集合中的一种时，该函数返回YES，否则返回NO。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (nullable id)responseObjectForResponse:(nullable NSURLResponse *)response</div><div class="line">                           data:(nullable NSData *)data</div><div class="line">                          error:(NSError * _Nullable __autoreleasing *)error NS_SWIFT_NOTHROW;</div></pre></td></tr></table></figure>
+<p>该方法是对返回数据进行处理的方法，由于<code>AFHTTPResponseSerializer</code>继承了<code>&lt;AFURLResponseSerialization&gt;</code>协议中的该方法，所以每个<code>AFHTTPResponseSerializer</code>的子类都要实现该方法。</p>
+<h3 id="AFJSONResponseSerializer"><a href="#AFJSONResponseSerializer" class="headerlink" title="AFJSONResponseSerializer"></a>AFJSONResponseSerializer</h3><p><code>AFHTTPResponseSerializer</code>的子类，使用Apple自带的JSON解析，将NSData转化为字典。同时如果将<code>removesKeysWithNullValues</code>开启，将自动帮你把json数据中值为null的key去掉</p>
+<h3 id="AFXMLParserResponseSerializer、AFXMLDocumentResponseSerializer、AFPropertyListResponseSerializer"><a href="#AFXMLParserResponseSerializer、AFXMLDocumentResponseSerializer、AFPropertyListResponseSerializer" class="headerlink" title="AFXMLParserResponseSerializer、AFXMLDocumentResponseSerializer、AFPropertyListResponseSerializer"></a>AFXMLParserResponseSerializer、AFXMLDocumentResponseSerializer、AFPropertyListResponseSerializer</h3><p>这三个类都是<code>AFHTTPResponseSerializer</code>的子类。</p>
+<p><code>AFXMLParserResponseSerializer</code> 将数据转化为NSXMLParser 的一个实例</p>
+<p><code>AFXMLDocumentResponseSerializer</code> 将数据转化为<code>NSXMLDocument</code></p>
+<p><code>AFPropertyListResponseSerializer</code>将数据转化为plist文件</p>
+<h3 id="AFImageResponseSerializer"><a href="#AFImageResponseSerializer" class="headerlink" title="AFImageResponseSerializer"></a>AFImageResponseSerializer</h3><p><code>AFHTTPResponseSerializer</code>的子类，将数据转化为UIImage </p>
+<p>在这里对图片做了优化处理。一般来说，网络上传输的图片都是已经被压缩过的，如果直接将存储压缩数据的UIImage赋值给UIImageView，在图片显示时，UIImageView会判断数据是否已经解压缩，如果数据是压缩数据，则在主线程将数据解压生成位图后，在进行渲染显示。为了保证图片显示的流畅性，默认情况下，AFNetworking会将（png和jpeg）图片数据进行解压缩，生成位图保存在内存。这是典型的以空间换取时间的做法。</p>
+<p>具体实现上在AFInflatedImageFromResponseWithDataAtScale里，创建一个画布，把UIImage画在画布上，再把这个画布保存成UIImage返回给上层。当然，对图片在后台进行解压缩也是有一定的条件的，当图片太大，或者图片不是png或jpeg格式或者图片的颜色格式是CMKY就不会进行解压缩。</p>
+<p>如果直接显示压缩图片，解压缩是由GPU进行的。如果是手动对图片进行解压，其实是在CPU进行操作。所以本质上来说，提前对图片进行解压，是将GPU的工作放到CPU中执行。 </p>
+<hr>
+<h2 id="AFURLSessionManager笔记"><a href="#AFURLSessionManager笔记" class="headerlink" title="AFURLSessionManager笔记"></a>AFURLSessionManager笔记</h2><h3 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h3><ul>
+<li><code>AFURLSessionManager</code> 主要是创建和管理<code>NSURLSession</code>，实现了<code>&lt;NSURLSessionTaskDelegate&gt;</code>, <code>&lt;NSURLSessionDataDelegate&gt;</code>, <code>&lt;NSURLSessionDownloadDelegate&gt;</code>, and <code>&lt;NSURLSessionDelegate&gt;</code>这几个协议。</li>
+</ul>
+<ul>
+<li>在<code>AFURLSessionManager</code>使用了method swizzling 对<code>NSURLSessionTask</code>的<code>resume</code>和<br><code>suspend</code>方法进行了监听。</li>
+</ul>
+<ul>
+<li><p><code>AFURLSessionManagerTaskDelegate</code>保存了每个Task的独立回调，包括请求完成回调，上传进度回调，下载完成回调。该类实现了<code>&lt;NSURLSessionTaskDelegate&gt;</code>, <code>&lt;NSURLSessionDataDelegate&gt;</code>, <code>&lt;NSURLSessionDownloadDelegate&gt;</code>这几个协议。</p>
+</li>
+<li><p>在<code>AFURLSessionManager</code>用一个字典<code>mutableTaskDelegatesKeyedByTaskIdentifier</code>保存了每个task的delegate，当session中的代理被调用了，如果是<code>&lt;NSURLSessionTaskDelegate&gt;</code>, <code>&lt;NSURLSessionDataDelegate&gt;</code>, <code>&lt;NSURLSessionDownloadDelegate&gt;</code>这几个协议的方法，就会进一步通过<code>task</code>的id，从字典中取出对应的delegate，在通过delegte调用task中的代理方法。</p>
+</li>
+<li><p><code>AFURLSessionManager</code>将原本要通过delegate实现的回调，都变成用block来实现。</p>
+</li>
+<li><p><code>AFURLSessionManagerTaskDelegate</code> 通过用KVO监听<code>NSURLSessionTask</code>的<code>countOfBytesReceived</code>、<code>countOfBytesExpectedToReceive</code>、<code>countOfBytesExpectedToSend</code>、<code>countOfBytesSent</code>这几个属性，来实现对下载进度的更新。</p>
+</li>
+<li><p>关于数据读取方面：<br>在<code>AFNetworing</code>中创建一个异步队列<code>url_session_manager_processing_queue</code>请求完成后的数据读取都是在该并行队列中异步执行。</p>
+</li>
+<li><p>在<code>AFURLSessionManager</code>有2个队列，一个是用来发送请求的串行队列，一个用来处理回复的并行队列</p>
+</li>
+<li><p><code>AFURLSessionManagerTaskDelegate</code> 用来保存每个task以及下载的数据，监视下载进度，异步实现下载完成后的数据解析，并完成回调。</p>
+</li>
+</ul>
+<ul>
+<li>总体来说，<code>AFURLSessionManager</code>是对session的管理，保存了所有的task，而<code>AFURLSessionManagerTaskDelegate</code>是对task的管理，保存了task的下载进度，下载数据。</li>
+</ul>
+<h3 id="AFURLSessionManager总结"><a href="#AFURLSessionManager总结" class="headerlink" title="AFURLSessionManager总结"></a>AFURLSessionManager总结</h3><h4 id="网络请求的步骤"><a href="#网络请求的步骤" class="headerlink" title="网络请求的步骤"></a>网络请求的步骤</h4><ol>
+<li>传入对应的参数，通过<code>AFHTTPRequestSerializer</code>或其子类，将参数和数据进行序列化，生成相应的网络请求<code>NSMutableURLRequest</code>的实例。</li>
+<li>创建一个<code>NSURLSession</code>实例，并设置其delegate和delegateQueue。</li>
+<li>通过第一步创建的<code>NSMutableURLRequest</code>的实例，根据需求，通过session创建不同的task。</li>
+<li>创建task的delegate，在delegate中保存了task的独立回调，包括<code>请求完成回调</code>、<code>下载进度回调</code>等等。并通过字典，将task和其对应的delegte进行保存。</li>
+<li>通过<code>resume</code>，开启task的网络请求。</li>
+<li>当收到数据时，会调用session的代理方法，通过task的id获取对应的delegate，将数据传给task的代理方法处理。在这个过程中，会执行对应的回调。</li>
+<li>当task的delegate收到数据时，如果不是最后一块数据块，则将数据和之前接收的拼接保存起来。如果确认接收完毕，便创建一个并行队列，异步调用<code>AFHTTPResponseSerializer</code>实例或其子类，完成数据解析工作。解析完成后，在回到主线程将解析后的数据通过block传递。</li>
+<li>task完成后会自动释放，所以在完成请求后，要手动将task对应的delegate也释放。</li>
+</ol>
+<hr>
+<h2 id="AFNetworkReachabilityManager"><a href="#AFNetworkReachabilityManager" class="headerlink" title="AFNetworkReachabilityManager"></a>AFNetworkReachabilityManager</h2><p><code>AFNetworkReachabilityManager</code>  对网络连接进行了监听。如果网络状态发生改变，会调用block进行回调；</p>
+<p>主要方法：<br><code>+ (instancetype)sharedManager;</code><br>获得单例对象</p>
+<p><code>- (void)startMonitoring;</code> 和<code>- (void)stopMonitoring;</code><br>开始监听和结束监听</p>
+<p><code>- (void)setReachabilityStatusChangeBlock:(nullable void (^)(AFNetworkReachabilityStatus status))block;</code><br>设置网络变化是的回调函数</p>
+<hr>
+<h2 id="AFSecurityPolicy"><a href="#AFSecurityPolicy" class="headerlink" title="AFSecurityPolicy"></a>AFSecurityPolicy</h2><p><code>AFSecurityPolicy</code> 主要是用来评价服务器是否是可以信任的，添加了SSL证书到程序中，防止中间人攻击 和一些其它的漏洞</p>
+<p>主要方法：</p>
+<p><code>- (BOOL)evaluateServerTrust:(SecTrustRef)serverTrust
+                  forDomain:(nullable NSString *)domain;</code><br>判断在制定的域中，该服务器是否是可以信任的。当服务器的证书改变是，可以调用该函数。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://github.com/AFNetworking/AFNetworking" target="_blank" rel="external">AFNetworking 源码</a></li>
+<li><a href="http://blog.cnbang.net/tech/2371/" target="_blank" rel="external">AFNetworking2.0源码解析</a>                                                                              </li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS-网络编程/" rel="tag"># iOS - 网络编程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/19/block在被copy的时间点/" rel="next" title="block被copy的时间点">
+                <i class="fa fa-chevron-left"></i> block被copy的时间点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/24/AFNetworking源代码学习-图片下载及其优化/" rel="prev" title="AFNetworking源代码学习-图片下载及其优化">
+                AFNetworking源代码学习-图片下载及其优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/24/源代码学习笔记/"
+           data-title="AFNetworking 3.0 源代码学习笔记" data-url="http://yoursite.com/2016/04/24/源代码学习笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="WillToSky" />
+          <p class="site-author-name" itemprop="name">WillToSky</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AFHTTPRequestSerializer-笔记"><span class="nav-number">1.</span> <span class="nav-text">AFHTTPRequestSerializer 笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AFHTTPRequestSerializer"><span class="nav-number">1.1.</span> <span class="nav-text">AFHTTPRequestSerializer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读写属性："><span class="nav-number">1.1.1.</span> <span class="nav-text">读写属性：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#只读属性"><span class="nav-number">1.1.2.</span> <span class="nav-text">只读属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#公开方法："><span class="nav-number">1.1.3.</span> <span class="nav-text">公开方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#设置请求头"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">设置请求头</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取请求头"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">获取请求头</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置授权的用户名和密码"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">设置授权的用户名和密码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#清除授权的用户名和密码"><span class="nav-number">1.1.3.4.</span> <span class="nav-text">清除授权的用户名和密码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#设置产下字符串的序列化风格"><span class="nav-number">1.1.3.5.</span> <span class="nav-text">设置产下字符串的序列化风格</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#通过block-自定义查询字符串的序列化"><span class="nav-number">1.1.3.6.</span> <span class="nav-text">通过block 自定义查询字符串的序列化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建一个NSMutableURLRequest请求"><span class="nav-number">1.1.3.7.</span> <span class="nav-text">创建一个NSMutableURLRequest请求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建一个Multipart请求"><span class="nav-number">1.1.3.8.</span> <span class="nav-text">创建一个Multipart请求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将请求中的数据写入指定文件中，将请求的HTTPBodyStream属性设置为nil，在将请求返回返回"><span class="nav-number">1.1.3.9.</span> <span class="nav-text">将请求中的数据写入指定文件中，将请求的HTTPBodyStream属性设置为nil，在将请求返回返回</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#细节知识点"><span class="nav-number">1.1.4.</span> <span class="nav-text">细节知识点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AFHTTPRequestSerializer-整理"><span class="nav-number">1.2.</span> <span class="nav-text">AFHTTPRequestSerializer 整理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AFURLRequestSerialization-协议"><span class="nav-number">1.2.1.</span> <span class="nav-text">AFURLRequestSerialization 协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何将构建Multipart请求"><span class="nav-number">1.2.2.</span> <span class="nav-text">如何将构建Multipart请求</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Multipart协议"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Multipart协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AFNetworing中的实现方式"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">AFNetworing中的实现方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#相关类型解释"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">相关类型解释</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#AFMultipartFormData协议"><span class="nav-number">1.2.2.3.1.</span> <span class="nav-text">AFMultipartFormData协议</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#AFHTTPBodyPart"><span class="nav-number">1.2.2.3.2.</span> <span class="nav-text">AFHTTPBodyPart</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#AFMultipartBodyStream"><span class="nav-number">1.2.2.3.3.</span> <span class="nav-text">AFMultipartBodyStream</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#AFStreamingMultipartFormData"><span class="nav-number">1.2.2.3.4.</span> <span class="nav-text">AFStreamingMultipartFormData</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#实现步骤"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">实现步骤</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AFHTTPResponseSerializer笔记"><span class="nav-number">2.</span> <span class="nav-text">AFHTTPResponseSerializer笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AFHTTPResponseSerializer"><span class="nav-number">2.1.</span> <span class="nav-text">AFHTTPResponseSerializer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主要方法"><span class="nav-number">2.1.1.</span> <span class="nav-text">主要方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AFJSONResponseSerializer"><span class="nav-number">2.2.</span> <span class="nav-text">AFJSONResponseSerializer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AFXMLParserResponseSerializer、AFXMLDocumentResponseSerializer、AFPropertyListResponseSerializer"><span class="nav-number">2.3.</span> <span class="nav-text">AFXMLParserResponseSerializer、AFXMLDocumentResponseSerializer、AFPropertyListResponseSerializer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AFImageResponseSerializer"><span class="nav-number">2.4.</span> <span class="nav-text">AFImageResponseSerializer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AFURLSessionManager笔记"><span class="nav-number">3.</span> <span class="nav-text">AFURLSessionManager笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#知识点"><span class="nav-number">3.1.</span> <span class="nav-text">知识点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AFURLSessionManager总结"><span class="nav-number">3.2.</span> <span class="nav-text">AFURLSessionManager总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络请求的步骤"><span class="nav-number">3.2.1.</span> <span class="nav-text">网络请求的步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AFNetworkReachabilityManager"><span class="nav-number">4.</span> <span class="nav-text">AFNetworkReachabilityManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AFSecurityPolicy"><span class="nav-number">5.</span> <span class="nav-text">AFSecurityPolicy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WillToSky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"willtosky"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

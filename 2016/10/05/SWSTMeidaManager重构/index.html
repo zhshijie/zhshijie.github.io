@@ -1,0 +1,718 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,重构," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="SWSTMediaManager 重构的思路">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SWSTMeidaManager重构">
+<meta property="og:url" content="http://yoursite.com/2016/10/05/SWSTMeidaManager重构/index.html">
+<meta property="og:site_name" content="WillToSky">
+<meta property="og:description" content="SWSTMediaManager 重构的思路">
+<meta property="og:updated_time" content="2016-10-08T06:30:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SWSTMeidaManager重构">
+<meta name="twitter:description" content="SWSTMediaManager 重构的思路">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/05/SWSTMeidaManager重构/"/>
+
+
+
+
+
+  <title> SWSTMeidaManager重构 | WillToSky </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bb1aa8ec5764977520de27eaccc4124a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">WillToSky</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">学习反思之路</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/05/SWSTMeidaManager重构/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="WillToSky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="WillToSky">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="WillToSky" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SWSTMeidaManager重构
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-05T10:13:08+08:00">
+                2016-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/05/SWSTMeidaManager重构/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/05/SWSTMeidaManager重构/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  SWSTMediaManager 重构的思路
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近使用ffmpeg，在iOS端做一些有关视音频方面的处理。在iOS端，主要是实现一个视频的提取和转码功能。将视频中的视频流和音频流提取出来，如果获取到的视频流不是<code>H264</code>或音频流不是<code>AAC</code>格式的，就转成这2种格式，然后发送到网络端。之前的这部分功能，每有进行架构分解，结果都写在了一个类里面。利用国庆期间，对之前写过的代码进行了重构处理。</p>
+<h2 id="未修改的代码架构"><a href="#未修改的代码架构" class="headerlink" title="未修改的代码架构"></a>未修改的代码架构</h2><p>未修改之前的代码，其实不能用感觉都是没有架构一说的，就是将所有功能都堆砌在一个<code>SWSTMediaManager</code>的类中。简略代码(列了下函数名称)如下：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)initWithPath:(<span class="built_in">NSString</span> *)path ;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)play;</div><div class="line">- (<span class="keyword">void</span>)stop</div><div class="line">... 视音频相关控制函数</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)prepareWithPath:(<span class="built_in">NSString</span>*)path;</div><div class="line">- (<span class="built_in">BOOL</span>)initInputWithInputPath:(<span class="built_in">NSString</span>*)path</div><div class="line">- (<span class="built_in">BOOL</span>)initOutputWithPath:(<span class="built_in">NSString</span>*)path</div><div class="line">... 初始化ffmpeg中，音视频相关的上下文</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)cutPpsAnSps</div><div class="line">- (<span class="keyword">void</span>)handlePpsAndSps</div><div class="line">- (<span class="keyword">void</span>)handlePacket:(<span class="built_in">AVPacket</span>*)packet</div><div class="line">- (<span class="keyword">void</span>)handlelVideoOfH264:(<span class="built_in">AVPacket</span>*)packet</div><div class="line">... 处理提取到的音视频数据</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)getMediaInfo:(<span class="built_in">NSString</span>* )path</div><div class="line">... 获取音视频相关信息的一些函数</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)requestMoviePlay</div><div class="line">... 告诉服务的开始发送视频数据的网络请求</div></pre></td></tr></table></figure>
+<p>上下代码只是之前实现的类中的功能的一些代表，从这些函数，我们就可以看出来。这个类中负责的功能一共包含了<strong>视频的控制功能</strong>、<strong>ffmpeg相关上下文的初始化</strong>、<strong>视频原始数据的提取</strong>、<strong>视频数据的处理</strong>、<strong>网络请求处理</strong>。这么多功能都堆砌在一个类，明显违背了面向对象单一原则的。</p>
+<h2 id="重构后的代码架构"><a href="#重构后的代码架构" class="headerlink" title="重构后的代码架构"></a>重构后的代码架构</h2><p>要对代码进行功能，首先明确原先代码究竟实现了那些功能。先将实现的功能点都罗列出来。如果罗列出来的功能点还能进行细分，就在进行细分。由于是对之前的代码进行重构，所以功能点基本已经明确了。然后将可以独立出来的功能点都提取出去。</p>
+<h3 id="功能点"><a href="#功能点" class="headerlink" title="功能点"></a>功能点</h3><p>对于<code>SWSTMediaManager</code>而言，我罗列了以下功能点</p>
+<ul>
+<li>视音频控制功能</li>
+<li>视音频的提取功能<ul>
+<li>ffmpeg相关上下文的初始化</li>
+<li>视音频的读取 </li>
+</ul>
+</li>
+<li>视音频的处理功能<ul>
+<li>视音频的转码</li>
+</ul>
+</li>
+<li>视音频的发送功能</li>
+<li>网络请求功能</li>
+</ul>
+<p>在<code>SWSTMediaManager</code>中，只保留了<strong>视频控制功能</strong>这一个功能点，而将其他的几个功能点都移除出去了。</p>
+<h4 id="ffmpeg相关上下文的初始化"><a href="#ffmpeg相关上下文的初始化" class="headerlink" title="ffmpeg相关上下文的初始化"></a>ffmpeg相关上下文的初始化</h4><p>我将<strong>ffmpeg中相关上下文的初始化</strong>直接提取出来，放到<code>SWSTMediaInitaliser</code>类中，该类只提供了一个类函数</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">+(SWSTMediaContext*)createFormatContextWithPath:(<span class="built_in">NSString</span>*)path;</div></pre></td></tr></table></figure>
+<p>该函数通过传进去的视频路径，创建ffmpeg相关的上下文。这些上下文都存储函数返回在<code>SWSTMediaContext</code>的实例中。</p>
+<h4 id="视音频的读取"><a href="#视音频的读取" class="headerlink" title="视音频的读取"></a>视音频的读取</h4><p>视音频的读取也作为一个独立的功能点，封装在<code>SWSTMediaExtractor</code>中，该类需要通过<code>SWSTMediaInitaliser</code>中创建的<code>SWSTMediaContext</code>的实例进行初始化。所有视频数据的相关信息，都是通过该类进行读取。包括视频的长度，视频的数据等。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//初始化</span></div><div class="line">- (<span class="keyword">instancetype</span>)initWithContext:(SWSTMediaContext*)context;</div><div class="line"></div><div class="line"><span class="comment">// 读取视频中的一帧数据</span></div><div class="line">- (SWSTMediaData*)readFrame;</div><div class="line"><span class="comment">// 读取视频的长度</span></div><div class="line">- (<span class="built_in">NSTimeInterval</span>)duration;</div><div class="line"><span class="comment">// 将视频的进度条调到指点的位置</span></div><div class="line">- (<span class="built_in">BOOL</span>)seekToProgress:(<span class="keyword">double</span>)progress;</div></pre></td></tr></table></figure>
+<p>通过<code>readFrame</code>读取到的视频数据，会保持在<code>SWSTMediaData</code>的实例中，包括了视频的数据，pts（显示时间戳），dts（解码时间戳）, 数据类型（音频或视频）和附件信息（例如H264中pps和sps）。</p>
+<h4 id="数据的处理"><a href="#数据的处理" class="headerlink" title="数据的处理"></a>数据的处理</h4><p>通过<code>SWSTMediaExtractor</code>读取到数据后，紧接着便是将数据进行处理。在<code>SWSTBaseMediaHandle</code>中，提供<code>handleData</code>函数，可以对数据进行处理。由于需要支持不同的视音频压缩格式，例如视频的H264，MPEG-4或音频的AAC，MP3格式。所以数据处理方面，采用了面向对象的多态，来实现对不同格式视频的处理。</p>
+<p>在<code>SWSTBaseMediaHandle</code>有2个私有属性<code>videoHandle</code>和<code>audioHandle</code>，分别处理视频数据和音频数据。这2个属性的类型<code>SWSTBaseVideoHandle</code>和<code>SWSTBaseAudioHandle</code>分别作为视频和音频的抽象基类。以视频的抽象基类为例，在<br><code>SWSTBaseVideoHandle</code>中定义了一个抽象函数<code>handleVideoData</code>，所以继承该基类视频处理类，都要实现这个函数。例如，<code>SWSTH264Handle</code>就是继承了该基类，通过重写<code>handleVideoData</code>来实现对<em>H264</em>视频流的处理。</p>
+<p><code>SWSTBaseMediaHandle</code>的初始化函数中，会通过传进行的<code>SWSTMediaContext</code>的实例，选择相应的音视频处理器。</p>
+<h4 id="数据的发送"><a href="#数据的发送" class="headerlink" title="数据的发送"></a>数据的发送</h4><p>由于不同格式的数据，对数据的封装要求可能不太一样，所以也如同数据处理一样，采用了多态的实现，来实现不同数据格式的发送。</p>
+<h4 id="相关的网络请求"><a href="#相关的网络请求" class="headerlink" title="相关的网络请求"></a>相关的网络请求</h4><p>有关该功能的相关网络请求，都提取出来，封装到<code>SWSTMediaViewAPI</code>中。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对数据重构后，每一个类都有自己独立的责职，而且也实现了对不同视频格式处理的兼容，以后如果有需要添加新的视频格式支持，直接继承对应的抽象类，在原先的初始化代码中添加几行代码，便可实现新的视频格式的支持，不用对原先的代码进行大的修改。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/重构/" rel="tag"># 重构</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/25/ffmpeg音频转码/" rel="next" title="ffmpeg音频转码">
+                <i class="fa fa-chevron-left"></i> ffmpeg音频转码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/09/OpenGLES学习（纹理篇）/" rel="prev" title="OpenGLES学习（纹理篇）">
+                OpenGLES学习（纹理篇） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/05/SWSTMeidaManager重构/"
+           data-title="SWSTMeidaManager重构" data-url="http://yoursite.com/2016/10/05/SWSTMeidaManager重构/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="WillToSky" />
+          <p class="site-author-name" itemprop="name">WillToSky</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未修改的代码架构"><span class="nav-number">2.</span> <span class="nav-text">未修改的代码架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构后的代码架构"><span class="nav-number">3.</span> <span class="nav-text">重构后的代码架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能点"><span class="nav-number">3.1.</span> <span class="nav-text">功能点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ffmpeg相关上下文的初始化"><span class="nav-number">3.1.1.</span> <span class="nav-text">ffmpeg相关上下文的初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#视音频的读取"><span class="nav-number">3.1.2.</span> <span class="nav-text">视音频的读取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据的处理"><span class="nav-number">3.1.3.</span> <span class="nav-text">数据的处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据的发送"><span class="nav-number">3.1.4.</span> <span class="nav-text">数据的发送</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关的网络请求"><span class="nav-number">3.1.5.</span> <span class="nav-text">相关的网络请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.2.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WillToSky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"willtosky"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

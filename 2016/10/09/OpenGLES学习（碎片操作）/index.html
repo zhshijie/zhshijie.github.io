@@ -1,0 +1,762 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OpenGLES," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="碎片操作介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGL ES学习（碎片操作）">
+<meta property="og:url" content="http://yoursite.com/2016/10/09/OpenGLES学习（碎片操作）/index.html">
+<meta property="og:site_name" content="WillToSky">
+<meta property="og:description" content="碎片操作介绍">
+<meta property="og:image" content="http://p1.bqimg.com/4851/9893c13bef05ed94.png">
+<meta property="og:image" content="http://p1.bqimg.com/4851/0332a70acfbd619e.png">
+<meta property="og:updated_time" content="2017-02-06T11:25:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGL ES学习（碎片操作）">
+<meta name="twitter:description" content="碎片操作介绍">
+<meta name="twitter:image" content="http://p1.bqimg.com/4851/9893c13bef05ed94.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/09/OpenGLES学习（碎片操作）/"/>
+
+
+
+
+
+  <title> OpenGL ES学习（碎片操作） | WillToSky </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bb1aa8ec5764977520de27eaccc4124a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">WillToSky</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">学习反思之路</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/09/OpenGLES学习（碎片操作）/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="WillToSky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="WillToSky">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="WillToSky" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                OpenGL ES学习（碎片操作）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-09T21:21:08+08:00">
+                2016-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OpenGLES/" itemprop="url" rel="index">
+                    <span itemprop="name">OpenGLES</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/09/OpenGLES学习（碎片操作）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/09/OpenGLES学习（碎片操作）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  碎片操作介绍
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="缓存区"><a href="#缓存区" class="headerlink" title="缓存区"></a>缓存区</h2><p>OpenGL ES支持3种类型的缓存区</p>
+<ul>
+<li>颜色缓冲区 （由前台和后台缓冲区组成）</li>
+<li>深度缓冲区</li>
+<li>模板缓冲区</li>
+</ul>
+<p>缓冲区的大小是有存储在缓冲区每一个像素的大小的总和。例如：颜色缓冲区由red,green,blue分量和可能存储的alpha分量，所以缓冲区的大小是所有分量位数的总和。</p>
+<h4 id="清理缓冲区"><a href="#清理缓冲区" class="headerlink" title="清理缓冲区"></a>清理缓冲区</h4><p>通过调用<code>glClear</code>清理指定的缓冲区，或是直接调用<code>glClearColor</code>，<code>glClearDepthf</code>和<code>glClearDepthf</code>清理相对应的缓冲区。</p>
+<p>如果一个帧缓冲区中有多个绘画缓冲区，则需要调用以下函数进行清理</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">glClearBufferiv</span><span class="params">(GLenum buffer, GLint drawBuffer, <span class="keyword">const</span> GLint *value)</span><span class="keyword">void</span> <span class="title">glClearBufferuiv</span><span class="params">(GLenum buffer, GLint drawBuffer, <span class="keyword">const</span> GLuint *value)</span><span class="keyword">void</span> <span class="title">glClearBufferfv</span><span class="params">(GLenum buffer, GLint drawBuffer, <span class="keyword">const</span> GLfloat *value)</span></span></div></pre></td></tr></table></figure>
+<p>可以使用<code>glClearBufferfi</code>同时清理深度和模板缓冲区</p>
+<h4 id="用掩码控制帧缓冲区的写入"><a href="#用掩码控制帧缓冲区的写入" class="headerlink" title="用掩码控制帧缓冲区的写入"></a>用掩码控制帧缓冲区的写入</h4><p>你可以通过指定缓存写入蒙版，来控制哪一个缓存区，或分量（在颜色缓冲区的情况下）可以被写入。在像素被写入缓冲区之前，可以通过蒙板来验证该缓冲区是否可以写入</p>
+<p>对于颜色缓冲区，<code>glColorMask</code>通常是指定在像素被写入时，哪一个颜色缓冲区的分量可以被更新。如果蒙版中指定的分量被设置成<code>GL_FALSE</code>，那么该该分量写入时便不可以被更新。默认所有的分量都是可以写入的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void glColorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)red, green, blue  	specify whether the particular color component, in the color buffer is modi able while 						rendering alpha</div></pre></td></tr></table></figure>
+<p>同样的 <code>glDepthMask</code>通过<code>GL_TRUE</code>和<code>GL_FALSE</code>来指定深度缓冲区是否可写。<br>在渲染半透明物体的时候，深度缓冲区的写入常常被禁用。开始时，启用深度缓冲区。将不透明的对象渲染到场景中。这保证了不透明对象正确的按照深度进行排序，并且深度缓冲区中包含了该场景对应的深度信息。然后，在渲染半透明对象之前，调用<code>glDepthMask (GL_FALSE)</code>来禁止深度缓冲区的写入。当深度缓冲区被禁止写入时，还是可以从缓冲区中读取相应的数值用于深度比较。这样允许半透明对象遮盖住不透明对象可以正确的缓存深度，但不会修改深度缓冲区的，从而使得不透明物体被半透明物体遮盖。</p>
+<p>和深度缓冲区和颜色缓冲区不同，对于模块缓冲区，可以通过提供一个蒙板，来确定哪一些模板的位可以被写入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void glStencilMask(GLuint mask)mask 	specifies a bitmask (in the range [0, 2n – 1], where n is the number of bits in the stencil buffer) 		of which bits in a pixel in the stencil buffer are modi able.</div></pre></td></tr></table></figure>
+<p><code>glStencilMaskSeparate</code>通常允许你根据图元面顶点的顺序来设置模型。这运行对图元的正面和反面使用不同的模型蒙板。<code>glStencilMaskSeparate(GL_FRONT_AND_BACK, mask)</code>相当于调用<code>glStencilMask</code>，会在多边形的正面和反面设置相同的蒙板</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">void glStencilMaskSeparate(GLenum face, GLuint mask)face 	specifies the stencil mask to be applied based on the face vertex order of the rendered primitive. 		Valid values are GL_FRONT, GL_BACK, and GL_FRONT_AND_BACK.mask 	specifies a bitmask (in the range [0, 2n], where n is the number of bits in the stencil buffer) of 		which bits in a pixel in the stencil buffer are speci ed by face.</div></pre></td></tr></table></figure>
+<h2 id="碎片测试和操作"><a href="#碎片测试和操作" class="headerlink" title="碎片测试和操作"></a>碎片测试和操作</h2><p>默认情况下 ，所有碎片的测试和操作都是不被允许的。所有的碎片按照写入帧缓冲区的顺序被转化为像素。通过允许各种类型的碎片操作测试能够选择哪一个碎片将被转化为像素，这将影响最后的图片。</p>
+<p>通过<code>glEnable</code>独立开启每一个碎片测试</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">CL_DEPTH_TEST 	控制碎片的深度测试</div><div class="line">CL_STENCIL_TEST	控制碎片的模型测试</div><div class="line">CL_BLEND			控制碎片的混合</div><div class="line">CL_DITHER			控制碎片颜色的抖动</div><div class="line">GL_SAMPLE_COVERAGE	控制样本覆盖值的计算</div><div class="line">GL_SAMPLE_ALPHA_TO_COVERAGE	控制在计算样本覆盖值时，样本透明值的使用。</div></pre></td></tr></table></figure>
+<h4 id="使用裁剪测试"><a href="#使用裁剪测试" class="headerlink" title="使用裁剪测试"></a>使用裁剪测试</h4><p>使用裁剪测试，可以指定一个矩形区域，这个区域限制了帧缓冲区中像素的写入。</p>
+<p>先使用<code>glScissor</code>指定一个矩形区域，在调用<code>glEnable(GL_SCISSOR_TEST)</code>来开启裁剪测试。所有的渲染，包括视窗的清理，都被限制在这个裁剪盒子。</p>
+<p>通常来说，这个裁剪盒子的区域是视窗的子区域。但这2个区域也可以不相交。但这2个区域不相交时，裁剪操作将会被执行在被渲染在视窗区域范围外的像素。</p>
+<h4 id="模板缓冲区测试"><a href="#模板缓冲区测试" class="headerlink" title="模板缓冲区测试"></a>模板缓冲区测试</h4><p>模板缓冲区是一个像素蒙板，它存储的数值决定了一个像素是否被更新。</p>
+<p>使用模板缓冲区要考虑2步操作。首先，初始化一个像素蒙板的模板缓冲区。第二步是使用模板缓冲区的值去控制后续在颜色缓冲区中的渲染。</p>
+<p>模板测试大体上是一个位测试。通过<code>glStencilFunc</code>和<code>glStencilFuncSeparate</code>函数来控制蒙板测试。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">void glStencilFunc(GLenum func, GLint ref, GLuint mask) </div><div class="line">void glStencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint mask)</div><div class="line"></div><div class="line">face  指定面，可以被设置为GL_FRONT, GL_BACK和 GL_FRONT_AND_BACK(glStencilFuncSeparate only).</div><div class="line">func  指定模型测试的比较函数，值可以设置为GL_EQUAL, GL_NOTEQUAL, GL_LESS, GL_GREATER, GL_LEQUAL, GL_GEQUAL, 		GL_ALWAYS,和 GL_NEVER.</div><div class="line">ref   指定比较的值</div><div class="line">mask 	指定模板缓冲区中的值和ref进行比较的位数</div></pre></td></tr></table></figure>
+<p>比如，指定一个模板测试，只有当模板缓冲区中的值的最后3位数等于2时，测试才能通过，函数描写如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">glStencilFunc ( GL_EQUAL, <span class="number">2</span>, <span class="number">0x7</span> );</div></pre></td></tr></table></figure>
+<p>在进行模板测试之后，你通常需要重新设置下模板缓冲区的值。一般来说，模板测试和深度测试的修改是结合在一起的。这2个测试的结果一共有3种：模板测试通过，深度测试不通过；模板测试不通过；模板测试通过，深度测试不通过；<br>通过<code>glStencilOp</code>和<code>glStencilOpSeparate</code>可以控制这3种结果对于的处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">void glStencilOp(GLenum sfail, GLenum zfail, GLenum zpass)void 	glStencilOpSeparate(GLenum face, GLenum sfail, GLenum zfail, GLenum zpass)face  specifies the face associated with the provided stencil function. Valid values are GL_FRONT, GL_BACK,and GL_FRONT_AND_BACK (glStencilOpSeparate only).</div><div class="line">sfail	specifies the operation applied to the stencil bits if the fragment fails the stencil test. Valid values are GL_KEEP, GL_ZERO, GL_REPLACE, GL_INCR, GL_DECR, GL_INCR_WRAP, GL_DECR_WRAP, and GL_INVERT.zfail 	specifies the operation applied when the fragment passes the stencil test, but fails the depth test</div><div class="line">zpass	specifies the operation applied when the fragment passes both the stencil and depth tests</div></pre></td></tr></table></figure>
+<p>如果模板测试不通过，碎片并不会被写入帧缓冲区。所以可以利用这个绘制模板缓冲区。</p>
+<ol>
+<li>先将模板缓冲区清理</li>
+<li>调用<code>glStencilFunc</code>进行模板测试</li>
+<li>调用<code>glStencilOp</code>设置测试后模板缓冲区的值。</li>
+<li>调用<code>glDrawElements</code>进行模板缓冲区绘制</li>
+</ol>
+<p>通过这4个步骤，变可以将模板缓冲区的指定区域设置为你想要的值。</p>
+<h4 id="深度缓冲区测试"><a href="#深度缓冲区测试" class="headerlink" title="深度缓冲区测试"></a>深度缓冲区测试</h4><p>深度缓冲区保持了渲染表明上每一个像素与视点最近物体的距离值。对于每一个新的输入碎片，将其与视点的距离和存储值比较。默认情况下，如果输入碎片的深度值小于深度缓冲区中保存的值，则输入碎片的深度值代替保持在深度缓冲区中的值，然后其颜色值代替颜色缓冲区中的颜色值。</p>
+<p>可以通过<code>glDrawElements</code>来设置深度测试的比较运算符。</p>
+<h2 id="混合"><a href="#混合" class="headerlink" title="混合"></a>混合</h2><p>一旦碎片通过了所有的碎片测试，碎片生成的像素颜色将会和颜色缓存中相同碎片位置的已经存在的颜色混合。在2种颜色混合之前，他们都会乘以一个缩放因子，然后在采用指定的混合方程式进行混合。混合方程式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">C(final) =f(source)C(source)opf(destination)C(destination)</div></pre></td></tr></table></figure>
+<p><code>f(source)</code>和<code>C(source)</code>是输入碎片的缩放因子和颜色。<code>f(destination)</code>和<code>C(destination)</code>是像素的缩放因子和颜色。<code>op</code>是数学运算符，用来混合缩放后的数值。</p>
+<p>缩放因子通过调用<code>glBlendFunc</code>或<code>glBlendFuncSeparate</code>进行指定</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">void glBlendFunc(GLenum sfactor, GLenum dfactor)</div><div class="line"></div><div class="line">sfactor 	输入碎片的混合系数</div><div class="line">dfactor	目标像素的混合系数</div><div class="line"></div><div class="line"></div><div class="line">void glBlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha)</div><div class="line"></div><div class="line">srcRGB		输入碎片的RGB3个分量混合系数</div><div class="line">dstRGB		目标像素的RGB3个分量混合系数</div><div class="line">srcAlpha	输入碎片的透明值混合系数</div><div class="line">dstAlpha	输出碎片的透明皂混合系数</div></pre></td></tr></table></figure>
+<p>每个系数的可选择如下图：</p>
+<p><img src="http://p1.bqimg.com/4851/9893c13bef05ed94.png" alt=""><br><img src="http://p1.bqimg.com/4851/0332a70acfbd619e.png" alt=""></p>
+<p>上表中的<code>(Rs, Gs, Bs, As)</code>表示和输入碎片颜色相关的颜色分量，<code>(Rd, Gd, Bd, Ad)</code>表示和颜色缓冲区中以存在像素颜色相关的分量。<code>(Ra, Gc, Bc, Ac)</code>代表了常数颜色，可以通过<code>glBlendColor</code>进行设置。</p>
+<p>在输入碎片和像素颜色已经和相关的缩放系数相乘后，他们将被通过混合运算进行混合。可以通过<code>glBlendEquation</code>和<code>glBlendEquationSeparate</code>指定混合运算，默认指定的混合运算是<code>GL_FUNC_ADD</code>。<code>GL_FUNC_SUBTRACT</code>是将输入碎片值减去帧缓冲区中的值。<code>GL_FUNC_REVERSE_SUBTRACT</code>是帧缓冲区的值减去输入碎片的值。</p>
+<h2 id="抖动"><a href="#抖动" class="headerlink" title="抖动"></a>抖动</h2><p>在一个系统中，由于帧缓冲区中每个分量的位数导致帧缓冲区中可用的颜色数量有限，我们可以通过抖动算法来模拟更多的颜色深度。抖动算法以某种方式安排颜色，使得图片的展现的颜色比实际颜色更多样。<br>可以使用<code>glEnable</code>或<code>glDisable</code>设置<code>GL_DITHER</code>达到开启或关闭抖动的目的。默认情况下是开启抖动的。</p>
+<h2 id="多重采样抗锯齿"><a href="#多重采样抗锯齿" class="headerlink" title="多重采样抗锯齿"></a>多重采样抗锯齿</h2><p>抗锯齿是通过减少不相关联的像素在渲染时产生的视觉伪像，已达到提高生产图像质量的重要技术。OpenGL ES 3.0的几何图元是在栅格中被光栅化的，它们的边缘在这个过程可能发生变形。在绘制横跨显示器对角线的时候，你几乎一定会发现阶梯效应</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenGLES/" rel="tag"># OpenGLES</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/09/OpenGLES学习（碎片着色器）/" rel="next" title="OpenGL ES 学习（碎片着色器）">
+                <i class="fa fa-chevron-left"></i> OpenGL ES 学习（碎片着色器）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/30/片段对象-Framebuffer-Objects/" rel="prev" title="片段缓存对象(Framebuffer_Objects)">
+                片段缓存对象(Framebuffer_Objects) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/09/OpenGLES学习（碎片操作）/"
+           data-title="OpenGL ES学习（碎片操作）" data-url="http://yoursite.com/2016/10/09/OpenGLES学习（碎片操作）/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="WillToSky" />
+          <p class="site-author-name" itemprop="name">WillToSky</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存区"><span class="nav-number">1.</span> <span class="nav-text">缓存区</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#清理缓冲区"><span class="nav-number">1.0.1.</span> <span class="nav-text">清理缓冲区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用掩码控制帧缓冲区的写入"><span class="nav-number">1.0.2.</span> <span class="nav-text">用掩码控制帧缓冲区的写入</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#碎片测试和操作"><span class="nav-number">2.</span> <span class="nav-text">碎片测试和操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用裁剪测试"><span class="nav-number">2.0.1.</span> <span class="nav-text">使用裁剪测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模板缓冲区测试"><span class="nav-number">2.0.2.</span> <span class="nav-text">模板缓冲区测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#深度缓冲区测试"><span class="nav-number">2.0.3.</span> <span class="nav-text">深度缓冲区测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混合"><span class="nav-number">3.</span> <span class="nav-text">混合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抖动"><span class="nav-number">4.</span> <span class="nav-text">抖动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多重采样抗锯齿"><span class="nav-number">5.</span> <span class="nav-text">多重采样抗锯齿</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WillToSky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"willtosky"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

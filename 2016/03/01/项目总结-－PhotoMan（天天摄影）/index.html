@@ -1,0 +1,796 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS,项目," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="《天天摄影》项目的总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目总结 －PhotoMan（天天摄影）">
+<meta property="og:url" content="http://yoursite.com/2016/03/01/项目总结-－PhotoMan（天天摄影）/index.html">
+<meta property="og:site_name" content="WillToSky">
+<meta property="og:description" content="《天天摄影》项目的总结">
+<meta property="og:updated_time" content="2016-04-19T06:22:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目总结 －PhotoMan（天天摄影）">
+<meta name="twitter:description" content="《天天摄影》项目的总结">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/03/01/项目总结-－PhotoMan（天天摄影）/"/>
+
+
+
+
+
+  <title> 项目总结 －PhotoMan（天天摄影） | WillToSky </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?bb1aa8ec5764977520de27eaccc4124a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">WillToSky</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">学习反思之路</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/01/项目总结-－PhotoMan（天天摄影）/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="WillToSky">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="WillToSky">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="WillToSky" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                项目总结 －PhotoMan（天天摄影）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-03-01T20:40:05+08:00">
+                2016-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目/" itemprop="url" rel="index">
+                    <span itemprop="name">项目</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/01/项目总结-－PhotoMan（天天摄影）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/01/项目总结-－PhotoMan（天天摄影）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+              <div class="post-description">
+                  《天天摄影》项目的总结
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><h5 id="关于天天摄影"><a href="#关于天天摄影" class="headerlink" title="关于天天摄影"></a>关于天天摄影</h5><p>天天摄影是一个用于手机拍摄照片展示的软件。用户可以将自己手机上的照片，通过app或者是网页上传到社区上，供别人欣赏。也可以利用这些照片参加一些由开发商发起的比赛。</p>
+<h4 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h4><blockquote>
+<p>文件结构</p>
+</blockquote>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">网络层的文件结构</div><div class="line">－－－－－－－－</div><div class="line">- Networking</div><div class="line">  - Service</div><div class="line">  - ResponseObject</div><div class="line">  - DataObject</div><div class="line">  - RequestObject</div><div class="line">－－－－－－－－</div></pre></td></tr></table></figure>
+<p><code>Service</code> 在天天摄影项目中的网络层中，采用了集约型调用方式，将所有的API分装成了4大模块 － 用户模块(UserService)，公共模块(CommonService)，社区模块(communityService)和比赛模块(CompetitionService)，放在Service文件夹中。这也是网络层开放的接口。每个API都采用Block进行网络请求回调</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">－－－－－－－－－－－－－－－－</div><div class="line">UserService.h</div><div class="line">用户模块的一个接口</div><div class="line">@brief 获取用户资料</div><div class="line">@param userId            用户Id</div><div class="line">@param sessionId         会话<span class="keyword">id</span></div><div class="line">+ (<span class="keyword">void</span>)getUserInfoWithUserId:(<span class="built_in">NSInteger</span>)userId</div><div class="line">                    sessionId:(<span class="built_in">NSString</span>*)sessionId</div><div class="line">                      success:(GetUserInfoBlock)success</div><div class="line">                      failure:(FailureBlock)failure; </div><div class="line">－－－－－－－－－－－－－－－－</div></pre></td></tr></table></figure>
+<p> <code>DataObject</code> 存放所有的基础数据模型，例如</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//*****************************用户个人信息*****************************</span></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UserObject</span> : <span class="title">NSObject</span></span></div><div class="line"><span class="comment">//用户id</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSInteger</span> user_id;</div><div class="line"><span class="comment">//昵称</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">retain</span>) <span class="built_in">NSString</span>* nick_name;</div></pre></td></tr></table></figure>
+<p><code>ResponseObject</code> 存放所有网络返回的数据模型，所有的ResponseObject都继承于BaseResponseObject。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ResponseObject</span> : <span class="title">NSObject</span></span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">retain</span>)<span class="built_in">NSString</span> *msg;</div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>)<span class="built_in">NSInteger</span> code;</div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">retain</span>)<span class="built_in">NSDictionary</span> *data;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p><code>RequestObject</code> 存放所有请求参数的数据模型。当请求参数过多的时候才使用。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">GetPhotoListRequestObject</span> : <span class="title">NSObject</span></span></div><div class="line"><span class="comment">/// 社区类型</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) CommunityType community_type;</div><div class="line"><span class="comment">/// 会话id</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">retain</span>)<span class="built_in">NSString</span> *session_id;</div><div class="line"><span class="comment">/// 用户id</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSInteger</span> user_id;</div><div class="line"><span class="comment">/// 排序方式</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) SortOrder sort_order;</div><div class="line"><span class="comment">/// 比赛id</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSInteger</span> competition_id;</div><div class="line"><span class="comment">/// 关系</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) RelationType relation_type;</div><div class="line"><span class="comment">/// 每页数量</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSInteger</span> page_size;</div><div class="line"><span class="comment">/// 每页页码</span></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>,<span class="keyword">assign</span>) <span class="built_in">NSInteger</span> page;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<hr>
+<a id="more"></a>
+<h5 id="关于天天摄影的网络层架构问题"><a href="#关于天天摄影的网络层架构问题" class="headerlink" title="关于天天摄影的网络层架构问题"></a>关于天天摄影的网络层架构问题</h5><ol>
+<li>采用了那种交互模式来根业务层做对接</li>
+<li>是否将API返回的数据封装成对象然后再交付给业务层</li>
+<li>使用集约化调用方式还是使用离散型调用方式去调用API</li>
+</ol>
+<hr>
+<blockquote>
+<p>问题1 采用了那种交互模式来跟业务层做对接</p>
+</blockquote>
+<p> 在天天摄影中，就主要采用Block回调的方式来实现与业务层实现对接的，辅助使用Notificaton。一般情况下，如果网络请求成功，将会回调success代码块，如果网络请求失败，会回调failure代码块。</p>
+<p><em>使用Block的优点</em></p>
+<ul>
+<li><p>使用Block是可以做到灵活回调，在写接口是也不必去多写一个Procotol。而且可以在调用接口是可以顺便传入接口调用结果的响应操作。</p>
+<p><em>完善方面</em></p>
+<ul>
+<li>采用Delegate代替Block实现回调，原因是因为Block的有以下缺点 <ol>
+<li>Block 难以追踪，难以维护</li>
+<li>block会延长相关对象的生命周期</li>
+</ol>
+</li>
+<li>由于Block回调较于零碎，如果采用Delegate回调，可以是回调着陆点较为统一，提高代码的规范性</li>
+</ul>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>问题2 是否将API返回的数据封装成对象然后再交付给业务层</p>
+</blockquote>
+<p>在天天摄影项目中，请求成功后，有将对应的Json转化为对应的数据对象在返回给业务层。</p>
+<p><em>将数据转化为对象的优点</em></p>
+<ol>
+<li>代码可读性好。</li>
+<li>业务层容易调用相关的属性</li>
+</ol>
+<p><em>将数据转化为对象的缺点</em></p>
+<ol>
+<li><p>遇到NSArray时转化较为麻烦，而且有时需要多层转化。</p>
+<p>例如在天天摄影项目中留言模块中，聊天界面的API返回的数据是一个聊天界面信息的对象列表 Array<messageobject>,但是在生成对应的View中的Cell时，需要的是一个MessageFrame对象，所以在聊天界面的ViewMode中又得需要将MessageObject转化为MessageFrame对象。这样，从网络返回的原始数据就经过了2层的转化。而且都是数组内容，转化成本很高。</messageobject></p>
+</li>
+<li><p>返回数据中有一部分数据并不需要用于页面的展示</p>
+</li>
+<li>API复用性低，只有当API返回数据高度一致时，API才可以复用。</li>
+<li>同一API的数据被不同View展示时，难以控制数据转化的代码，它们有可能散落在任何需要的地方。</li>
+</ol>
+<p><em>如何处理API返回的数据</em><br>具体如何处理可以仔细研读<a href="http://casatwy.com/iosying-yong-jia-gou-tan-wang-luo-ceng-she-ji-fang-an.html" target="_blank" rel="external">Casa Taloyum 的 <ios应用架构谈 网络层设计方案=""></ios应用架构谈></a></p>
+<hr>
+<blockquote>
+<p>问题3 使用集约化调用方式还是使用离散型调用方式去调用API</p>
+</blockquote>
+<p>在天天摄影项目中，采用了集约化的调用方式，将业务相近的API放在一个类里，例如将和用户有关的API都UserService类里面，每个API对应一个具体的类方法。</p>
+<hr>
+<h5 id="这算是一个网络架构吗？"><a href="#这算是一个网络架构吗？" class="headerlink" title="这算是一个网络架构吗？"></a>这算是一个网络架构吗？</h5><p>做完这个项目后，我在看博客时看到了<a href="http://casatwy.com/iosying-yong-jia-gou-tan-wang-luo-ceng-she-ji-fang-an.html" target="_blank" rel="external">Casa Taloyum 的 <ios应用架构谈 网络层设计方案=""></ios应用架构谈></a>这篇文章。里面对网络架构进行了仔细的描述。回想起整个天天摄影的网络层，其实仅仅是对AFNetWorking 中Post请求的一个封装,仅仅能完成Post请求，而那时多这一层封装的目的，仅仅是为了在这里可以完成一些网络设置，例如:设置AFHTTPRequestSerializer等。而对于自定义网络请求头，断点续传，文件下载等功能都没有实现。如果仅仅是对于天天摄影这个项目，由于当时网络请求时全都是设置成了Post请求，而上传文件使用的是七牛的SDK，是足以满足需求的。但是如果想让网络层代码具有更大的复用性，就应该自己学会封装一个网络层。现在看了唐巧的封装的猿题库网络层的代码后，试着模仿自己写一个。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">天天摄影 对AFNetworking的Post的封装</div><div class="line">import <span class="string">"AFNetworking.h"</span></div><div class="line">import <span class="string">"MUResponseSerializer.h"</span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^FailureBlock)(<span class="built_in">NSError</span> *error);</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^SuccessBlock)(<span class="keyword">id</span> object) ;</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NetworkModel</span> : <span class="title">NSObject</span></span></div><div class="line"></div><div class="line">+ (<span class="keyword">instancetype</span>)netWorkModel;</div><div class="line"></div><div class="line">+ (<span class="keyword">void</span>)POST:(<span class="built_in">NSString</span> *)urlString</div><div class="line">  parameters:(<span class="keyword">id</span>)parameters</div><div class="line">responseClass:(Class)aClass</div><div class="line">     success:(SuccessBlock)success</div><div class="line">     failure:(FailureBlock)failure;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> @brief 通过传入uri获取完整请求路径,并且带有时间戳参数</div><div class="line"> @parma uri     相对地址</div><div class="line"> */</div><div class="line">+ (<span class="built_in">NSString</span> *)hostURLAndTimeWithUri:(<span class="built_in">NSString</span> *)uri;</div><div class="line"><span class="keyword">@end</span></div><div class="line">－－－－－－－－－－</div></pre></td></tr></table></figure>
+<h4 id="View层"><a href="#View层" class="headerlink" title="View层"></a>View层</h4><p>天天摄影是对于一些静态的View，采用了xib构造，而对于一些自定义的View，大多数都是采用纯代码编写。采用Delegate来进行进行AOP切片或者是按钮事件的响应传递。而一些动画效果，尽量都写在View层中。</p>
+<h4 id="Controller层"><a href="#Controller层" class="headerlink" title="Controller层"></a>Controller层</h4><p>由于天天摄影项目采用了MVVM的架构模式，所以每个ViewController都配有一个ViewModel，在这个ViewModel中包涵了对应的原来ViewController中的可以抽离出来的业务和ViewController控制的View展示所需要的数据。</p>
+<p>在我看来，可以抽离出来的业务包含有 － 调用API，处理API返回数据，数据格式转化，调用持久层接口。</p>
+<p>因为将viewController中的一些业务逻辑抽离了出来，所以ViewController的功能就仅仅包含 －－ 初始化View，响应Action，实现代理方法，负责View和ViewMode之间数据交换，和页面跳转。</p>
+<h5 id="MVC、MVVM的自我理解"><a href="#MVC、MVVM的自我理解" class="headerlink" title="MVC、MVVM的自我理解"></a>MVC、MVVM的自我理解</h5><blockquote>
+<p>关于ViewController是否属于MVC中的controller</p>
+</blockquote>
+<p>由于在iOS中，view和viewController已经有了一层绑定关系，所以之前不能确定ViewController是否属于controller。现在认为ViewController的确数据controller，原因很简单。controller的作用是处理业务逻辑，而如果使用MVC，能够处理业务逻辑的也就只有ViewController，所以viewController我认为应该是controller。</p>
+<blockquote>
+<p>关于MVVM，ViewController到底属于哪部分</p>
+</blockquote>
+<p>我认为在IOS中并没有严格意义上的MVVM架构，应该说在IOS中，MVVM表现为M-VM-VC-V。其中M、V和MVC中的M、V是一致的。但是在传统MVC中，业务逻辑都写在C中，也就是iOS的ViewController中，但是在MVVM中，就是将本来在ViewController中的一部分可以抽离出来的业务逻辑抽出，放到ViewModel中，即将原来的VC 拆成 VC－VM，减少了VC中的代码量。</p>
+<h4 id="关于代码的规范格式"><a href="#关于代码的规范格式" class="headerlink" title="关于代码的规范格式"></a>关于代码的规范格式</h4><ol>
+<li>在init中尽量不要使用self.property来调用属性。</li>
+<li>属性的初始化可以写在getter中，也可以写在setupProperty中，但是就是不要圈写在<code>viewDidload</code>中</li>
+<li>代码有一定的注释</li>
+<li>一个函数实现一个功能。</li>
+<li>尽量少用Block，因为Block难以追踪。</li>
+<li>驼峰命名</li>
+<li>如果有公用代码，不要都塞到一个Commod类中，将这些公用代码分好类，放到对应的类中，即使这个类只有一个函数。</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/项目/" rel="tag"># 项目</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/10/Block/" rel="next" title="Block">
+                <i class="fa fa-chevron-left"></i> Block
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/17/ViewController-life-cycle/" rel="prev" title="ViewController的生命周期">
+                ViewController的生命周期 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/01/项目总结-－PhotoMan（天天摄影）/"
+           data-title="项目总结 －PhotoMan（天天摄影）" data-url="http://yoursite.com/2016/03/01/项目总结-－PhotoMan（天天摄影）/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="WillToSky" />
+          <p class="site-author-name" itemprop="name">WillToSky</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#关于天天摄影"><span class="nav-number">1.1.</span> <span class="nav-text">关于天天摄影</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络层"><span class="nav-number">2.</span> <span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#关于天天摄影的网络层架构问题"><span class="nav-number">2.1.</span> <span class="nav-text">关于天天摄影的网络层架构问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#这算是一个网络架构吗？"><span class="nav-number">2.2.</span> <span class="nav-text">这算是一个网络架构吗？</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#View层"><span class="nav-number">3.</span> <span class="nav-text">View层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Controller层"><span class="nav-number">4.</span> <span class="nav-text">Controller层</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#MVC、MVVM的自我理解"><span class="nav-number">4.1.</span> <span class="nav-text">MVC、MVVM的自我理解</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于代码的规范格式"><span class="nav-number">5.</span> <span class="nav-text">关于代码的规范格式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WillToSky</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"willtosky"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
